@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * Created by Dell on 2017-01-26.
  */
-@RestController(value = "image")
+@RestController
+@RequestMapping(value = "/image")
 public class ImageController {
 
     @Autowired
