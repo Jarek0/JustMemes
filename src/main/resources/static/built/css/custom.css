@@ -1,0 +1,153 @@
+/* Basic css */
+@font-face {
+    font-family: MyFont1;
+    src: url(../fonts/Bitter-Bold.otf);
+}
+@font-face {
+    font-family: MyFont2;
+    src: url(../fonts/Bitter-Regular.otf);
+}
+body { background: #343434 !important;
+
+     font-family: "Times New Roman";}
+
+.main-block{
+    padding-top:50px;
+    background: #000000 !important;
+    margin-bottom:100px;
+    padding-bottom:50px;
+}
+
+/* Navbar */
+.navbar-brand {
+    padding: 0px;
+    margin: 0px;
+}
+.navbar-brand>img {
+    height: 100%;
+    margin:0;
+    padding:0;
+    width: auto;
+}
+.navbar{
+    position:fixed;
+    width:100%;
+    z-index: 999;
+    font-size:15px;
+}
+.dropdown-menu{
+    background-color: black;
+}
+.dropdown-menu>li>a{
+    color:white;
+}
+.dropdown-menu .presentation{
+    background-color: #363636;
+    color: #ffffff;
+}
+
+.navbar .glyphicon {
+    border-color: #9d9d9d;
+    border-style: solid;
+    border-width: 1px;
+    padding:3px;
+    border-radius: 1px;
+    vertical-align: middle;
+    margin-left:10px;
+    margin-bottom:1px;
+}
+.navbar .dropdown-menu:after{
+    display:none;
+}
+/* Memes */
+.mem h2{
+    font-family: MyFont2;
+    color:white;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.mem .glyphicon{
+    vertical-align: middle;
+}
+.mem .number{
+    font-family: MyFont2;
+    margin-left: 10px;
+    margin-right: 10px;
+    vertical-align: middle;
+    font-size: 25px;
+    color:white;
+}
+.mem .buttonTollbar{
+    margin-top:20px;
+}
+.mem .numberComments{
+    position:absolute;
+    color:black;
+    left:15px;
+    top:10px;
+    font-family: MyFont2;
+    font-size:20px;
+}
+.mem .glyphicon-comment {
+    font-size: 45px;
+    color:white;
+    vertical-align: middle;
+}
+
+
+/* Down panel */
+.downPanel{
+    margin-top:50px;
+}
+.downPanel .buttonTollbar .myButtonStyle1{
+    width:84%;
+    font-size:20px;
+    height:60px;
+    margin-right: 1%;
+
+}
+
+.downPanel .buttonTollbar .myButtonStyle2{
+    background: url(../images/ico-random.png) center center no-repeat #fffd00;
+    width:15%;
+
+}
+
+.downPanel .myButtonStyle{
+    font-family:MyFont2;
+    color:black;
+    background: #fffd00;
+    height:60px;
+}
+.downPanel .myButtonStyle:hover{
+    background-color: #fffe5c;
+}
+.downPanel .buttonTollbar .mcs-horizontal-example {
+    margin-typ:20px;
+    background-color: #000000;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: block
+}
+.downPanel .buttonTollbar .mcs-horizontal-example a {
+    display: inline-block;
+    margin:5px;
+    font-family: MyFont2;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 15px;
+    color:white;
+    background-color: #1f1f1f;
+    border-radius: 3px;
+    border-color: #1f1f1f;
+    border-width: 2px;
+    border-style: solid;
+    padding-top: 1px;
+    width:100px;
+    text-decoration: none;
+}
+
+.downPanel .buttonTollbar .mcs-horizontal-example a:hover,a:active {
+    background-color: #777;
+    border-color: #ffffff;
+}

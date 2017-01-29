@@ -1,0 +1,36 @@
+import React from 'react';
+import {Navbar,Header,Brand,Nav,Toggle,NavItem,Collapse,MenuItem,NavDropdown} from 'react-bootstrap';
+
+export default class Navigator extends React.Component{
+
+    render(){
+        return (
+            <Navbar inverse collapseOnSelect>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <a href="#"><img src="built/images/logo.png" alt="JustMemes"/></a>
+                    </Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                    <Nav>
+                        <NavItem eventKey={1} href="#">Waiting room</NavItem>
+                        <NavItem eventKey={2} href="#">Top</NavItem>
+                        <NavItem eventKey={2} href="#">Random</NavItem>
+                    </Nav>
+                    <Nav pullRight>
+                        <NavDropdown eventKey={3} id="dropdown"
+                                     title={
+                                         <span>Login<i className="glyphicon glyphicon-user"></i></span>
+                                     } noCaret>
+                            <MenuItem eventKey='1'> User Profile</MenuItem>
+                            <MenuItem eventKey='2'> Settings</MenuItem>
+                            <MenuItem divider />
+                            <MenuItem eventKey='3'> Logout</MenuItem>
+                        </NavDropdown>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        );
+    }
+};

@@ -6,7 +6,8 @@
   "scripts": {
     "babel": "babel",
     "webpack": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --inline -hot"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "babel-preset-react": "^6.22.0",
     "es6-promise": "^4.0.5",
     "react": "^15.4.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
     "webpack": "^1.14.0"
   }

@@ -1,18 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import Layout from './components/Layout';
 
 
-var CommentBox = React.createClass({
-    render: function(){
-        return (
-            <div className="commentBox">
-                Hello, world! I am a CommentBox.
-            </div>
-        );
-    }
-});
-
-ReactDOM.render(
-    <CommentBox />,
-document.getElementById('content')
-);
+ReactDOM.render(<Layout />,document.getElementById('layout'));
