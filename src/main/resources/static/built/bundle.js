@@ -21524,6 +21524,10 @@
 	
 	var _DownPanel2 = _interopRequireDefault(_DownPanel);
 	
+	var _Footer = __webpack_require__(435);
+	
+	var _Footer2 = _interopRequireDefault(_Footer);
+	
 	var _reactBootstrap = __webpack_require__(180);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -21567,7 +21571,8 @@
 	                        ),
 	                        _react2.default.createElement(_reactBootstrap.Col, { sm: 0, md: 1, lg: 1 })
 	                    )
-	                )
+	                ),
+	                _react2.default.createElement(_Footer2.default, null)
 	            );
 	        }
 	    }]);
@@ -21660,13 +21665,13 @@
 	                        { pullRight: true },
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavDropdown,
-	                            { eventKey: 3, id: 'dropdown',
+	                            { eventKey: 3, id: 'dropdown', noCaret: true,
 	                                title: _react2.default.createElement(
 	                                    'span',
 	                                    null,
 	                                    'Login',
 	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-user' })
-	                                ), noCaret: true },
+	                                ) },
 	                            _react2.default.createElement(
 	                                _reactBootstrap.MenuItem,
 	                                { eventKey: '1' },
@@ -40672,11 +40677,30 @@
 	                        { className: 'buttonTollbar' },
 	                        _react2.default.createElement(
 	                            _reactBootstrap.Button,
-	                            { bsStyle: 'primary', className: 'myButtonStyle myButtonStyle1' },
+	                            { bsStyle: 'primary', className: 'NextPage' },
 	                            'Next page!'
 	                        ),
-	                        _react2.default.createElement(_reactBootstrap.Button, { bsStyle: 'primary', className: 'myButtonStyle myButtonStyle2' }),
-	                        _react2.default.createElement(_ScroolMenu2.default, null)
+	                        _react2.default.createElement(_reactBootstrap.Button, { bsStyle: 'primary', className: 'Random' }),
+	                        _react2.default.createElement(_ScroolMenu2.default, null),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Form,
+	                            { inline: true, id: 'PagePanel' },
+	                            _react2.default.createElement(
+	                                _reactBootstrap.FormGroup,
+	                                { controlId: 'formInlinePage' },
+	                                _react2.default.createElement(
+	                                    _reactBootstrap.ControlLabel,
+	                                    null,
+	                                    'Page:'
+	                                ),
+	                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' }),
+	                                _react2.default.createElement(
+	                                    _reactBootstrap.Button,
+	                                    { type: 'submit' },
+	                                    'Go!'
+	                                )
+	                            )
+	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(_reactBootstrap.Col, { sm: 0, md: 1 })
@@ -40802,6 +40826,96 @@
 	}(_react2.default.Component);
 	
 	exports.default = ScroolMenu;
+	;
+
+/***/ },
+/* 435 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(180);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Footer = function (_React$Component) {
+	    _inherits(Footer, _React$Component);
+	
+	    function Footer() {
+	        _classCallCheck(this, Footer);
+	
+	        return _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).apply(this, arguments));
+	    }
+	
+	    _createClass(Footer, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _reactBootstrap.Grid,
+	                { className: 'down-block' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Row,
+	                    null,
+	                    _react2.default.createElement(_reactBootstrap.Col, { md: 2, lg: 2 }),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { md: 4, lg: 4, className: 'first' },
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'JustMemes is simple web application created in Spring Boot (backend) and React (frontend) frameworks. It is simple entertainment web page where logged in users can share memes. New memes go to the "waiting room" and if admins of system accept it they go to main page where every users can see it. So, have fun with using our page! :)'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'Created by: Jaros\u0142aw Bielec & Katarzyna Buszewicz'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { md: 4, lg: 4, className: 'second' },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#' },
+	                            'Contact'
+	                        ),
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#' },
+	                            'FAQ'
+	                        ),
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#' },
+	                            'Regulations'
+	                        )
+	                    ),
+	                    _react2.default.createElement(_reactBootstrap.Col, { md: 2, lg: 2 })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Footer;
+	}(_react2.default.Component);
+	
+	exports.default = Footer;
 	;
 
 /***/ }

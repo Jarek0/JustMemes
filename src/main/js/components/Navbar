@@ -19,10 +19,10 @@ export default class Navigator extends React.Component{
                         <NavItem eventKey={2} href="#">Random</NavItem>
                     </Nav>
                     <Nav pullRight>
-                        <NavDropdown eventKey={3} id="dropdown"
+                        <NavDropdown eventKey={3} id="dropdown" noCaret
                                      title={
                                          <span>Login<i className="glyphicon glyphicon-user"></i></span>
-                                     } noCaret>
+                                     }>
                             <MenuItem eventKey='1'> User Profile</MenuItem>
                             <MenuItem eventKey='2'> Settings</MenuItem>
                             <MenuItem divider />
