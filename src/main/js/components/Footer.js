@@ -12,8 +12,8 @@ export default class Footer extends React.Component{
                     <p>
                         JustMemes is simple web application created in Spring Boot (backend) and React (frontend)
                         frameworks. It is simple entertainment web page where logged in users can share memes. New memes go to
-                        the "waiting room" and if admins of system accept it they go to main page where every users
-                        can see it. So, have fun with using our page! :)
+                        the "waiting room" and if admins of system accept they they go to main page where every users
+                        can see they. So, have fun with using our page! :)
                     </p>
                     <p>Created by: Jarosław Bielec & Katarzyna Buszewicz</p>
                     </Col>
