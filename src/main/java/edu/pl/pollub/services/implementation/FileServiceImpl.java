@@ -7,6 +7,7 @@ import edu.pl.pollub.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 /**
  * Created by Dell on 2017-02-11.
  */
+@Service
 public class FileServiceImpl implements FileService{
     private final Path rootLocation;
     @Autowired
