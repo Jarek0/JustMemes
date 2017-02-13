@@ -10,7 +10,7 @@ import java.security.Timestamp;
  * Created by Dell on 2017-01-26.
  */
 @Entity
-@Table(name="images")
+@Table(name="memes")
 public class Mem {
     @Id
     @GeneratedValue
@@ -23,6 +23,15 @@ public class Mem {
     private Timestamp createDate;
 
     private Timestamp modifyDate;*/
+
+    public Mem(){
+
+    }
+
+    public Mem(String title,String fileType){
+        this.title=title;
+        this.fileType=fileType;
+    }
 
     public long getId() {
         return id;

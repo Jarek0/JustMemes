@@ -15,7 +15,7 @@ public interface MemService {
 
     List<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException;
 
-    void addMem(MultipartFile file, Mem mem);
+    void addMem(MultipartFile file, String memTitle);
 
     Resource getFileForMem(String fileName);
 }

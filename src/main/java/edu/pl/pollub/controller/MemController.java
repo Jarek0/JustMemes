@@ -2,20 +2,16 @@ package edu.pl.pollub.controller;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.exception.PageNotExistException;
-import edu.pl.pollub.services.FileService;
 import edu.pl.pollub.services.MemService;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -40,21 +36,9 @@ public class MemController {
         return memService.showMemesFromPage(pageNumber);
     }
 
-    @RequestMapping(value = "/file/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<Resource> getFileForMem(@PathVariable String id) {
-
-        Resource file = memService.getFileForMem(id);
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+file.getFilename()+"\"")
-                .body(file);
-    }
-
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addMem(@RequestParam("file") MultipartFile file, @Valid @RequestBody Mem mem) {
-        memService.addMem(file,mem);
+    public void addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@Valid @NotNull @NotBlank String memTitle) {
+        memService.addMem(file,memTitle);
     }
 
 }

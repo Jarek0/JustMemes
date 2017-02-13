@@ -21541,13 +21541,31 @@
 	var Layout = function (_React$Component) {
 	    _inherits(Layout, _React$Component);
 	
-	    function Layout() {
+	    function Layout(props) {
 	        _classCallCheck(this, Layout);
 	
-	        return _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this, props));
+	
+	        _this.state = { memes: [] };
+	        return _this;
 	    }
 	
 	    _createClass(Layout, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            $.ajax({
+	                url: '/mem/page/' + 0,
+	                type: 'GET',
+	                cache: false,
+	                success: function (data) {
+	                    this.setState({ memes: data });
+	                }.bind(this),
+	                error: function () {
+	                    console.log('error');
+	                }.bind(this)
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -21564,9 +21582,9 @@
 	                        _react2.default.createElement(
 	                            _reactBootstrap.Col,
 	                            { sm: 12, md: 10, lg: 10, className: 'main-block' },
-	                            _react2.default.createElement(_Mem2.default, null),
-	                            _react2.default.createElement(_Mem2.default, null),
-	                            _react2.default.createElement(_Mem2.default, null),
+	                            this.state.memes.map(function (mem) {
+	                                return _react2.default.createElement(_Mem2.default, { title: mem.title, key: mem.id, id: mem.id, fileType: mem.fileType });
+	                            }),
 	                            _react2.default.createElement(_DownPanel2.default, null)
 	                        ),
 	                        _react2.default.createElement(_reactBootstrap.Col, { sm: 0, md: 1, lg: 1 })
@@ -40564,6 +40582,7 @@
 	    _createClass(Mem, [{
 	        key: 'render',
 	        value: function render() {
+	            var mainPath = 'src/main/resources/upload-files/';
 	            return _react2.default.createElement(
 	                _reactBootstrap.Row,
 	                { className: 'mem' },
@@ -40574,10 +40593,10 @@
 	                    _react2.default.createElement(
 	                        'h2',
 	                        null,
-	                        'New Mem!'
+	                        this.props.title
 	                    ),
 	                    _react2.default.createElement('hr', null),
-	                    _react2.default.createElement(_reactBootstrap.Image, { className: 'img-responsive center-block', src: 'http://placehold.it/700x500' }),
+	                    _react2.default.createElement(_reactBootstrap.Image, { className: 'img-responsive center-block', src: mainPath + this.props.id + '.' + this.props.fileType }),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'buttonTollbar' },
