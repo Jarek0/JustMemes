@@ -4,7 +4,6 @@ import Mem from './Mem';
 import DownPanel from './DownPanel';
 import Footer from './Footer';
 import {Grid,Row,Col} from 'react-bootstrap';
-import axios from 'axios';
 
 export default class Layout extends React.Component{
     constructor(props) {
@@ -13,11 +12,17 @@ export default class Layout extends React.Component{
     }
 
     componentDidMount() {
-        axios.get(`http://www.reddit.com/r/${this.props.subreddit}.json`)
-            .then(res => {
-                const posts = res.data.data.children.map(obj => obj.data);
-                this.setState({ posts });
-            });
+        $.ajax({
+            url: '/mem/page/'+0,
+            type: 'GET',
+            cache: false,
+            success: function(data) {
+                this.setState({ memes: data });
+            }.bind(this),
+            error: function() {
+                console.log('error');
+            }.bind(this)
+        });
     }
 
     render(){
@@ -28,9 +33,11 @@ export default class Layout extends React.Component{
                     <Row>
                         <Col sm={0} md={1}  lg={1}/>
                         <Col sm={12} md={10} lg={10} className="main-block">
-                            <Mem />
-                            <Mem />
-                            <Mem />
+                                {
+                                    this.state.memes.map((mem) =>
+                                        <Mem title={mem.title} key={mem.id} id={mem.id} fileType={mem.fileType} />
+                                    )
+                                }
                             <DownPanel />
                         </Col>
                         <Col sm={0} md={1} lg={1}/>

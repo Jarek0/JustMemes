@@ -4,13 +4,14 @@ import {Grid,Row,Col,Image,Button} from 'react-bootstrap';
 export default class Mem extends React.Component{
 
     render(){
+        var mainPath='src/main/resources/upload-files/';
         return (
             <Row className="mem">
             <Col sm={0} md={1} />
             <Col sm={12} md={10} >
-            <h2>New Mem!</h2>
+            <h2>{this.props.title}</h2>
             <hr />
-                <Image className="img-responsive center-block" src="http://placehold.it/700x500"/>
+                <Image className="img-responsive center-block" src={ mainPath+this.props.id+'.'+this.props.fileType}/>
                 <div className="buttonTollbar">
                     <Button bsStyle="success"><span className="glyphicon glyphicon-thumbs-up"></span></Button>
                     <span className="number">55</span>

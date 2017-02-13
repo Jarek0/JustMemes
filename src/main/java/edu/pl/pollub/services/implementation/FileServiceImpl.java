@@ -29,12 +29,18 @@ public class FileServiceImpl implements FileService{
         this.rootLocation = Paths.get(properties.getLocation());
     }
     @Override
-    public void store(MultipartFile file) {
+    public void store(MultipartFile file,String name,String fileType) {
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+
+            if(fileType.matches("gif|jpeg|png|mp4")){
+                Files.copy(file.getInputStream(), this.rootLocation.resolve(name+"."+fileType));
+            }else{
+                throw new StorageException("Your file do not have suitable type. Acceptable types are: gif, png, jpeg, mp4");
+            }
+
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
         }

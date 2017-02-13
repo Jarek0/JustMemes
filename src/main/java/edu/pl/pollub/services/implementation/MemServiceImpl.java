@@ -26,13 +26,13 @@ public class MemServiceImpl implements MemService{
     private FileService fileService;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Mem> findAllMemes(){
         return memRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException {
         List<Mem> memes=memRepository.findAll();
         if(memes.size()<(pageNumber*7+pageNumber)){
@@ -44,17 +44,16 @@ public class MemServiceImpl implements MemService{
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public void addMem(MultipartFile file,Mem mem){
-        if(memRepository.save(mem)!=null) {
-            fileService.store(file);
-            return;
-        }
-        throw new StorageException("Sorry, but there are some problems with add your mem to database");
+    @Transactional
+    public void addMem(MultipartFile file,String memTitle){
+        String fileType=file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
+        Mem mem=new Mem(memTitle,fileType);
+        mem=memRepository.save(mem);
+        fileService.store(file,String.valueOf(mem.getId()),fileType);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Resource getFileForMem(String fileName){
         return fileService.loadAsResource(fileName);
     }
