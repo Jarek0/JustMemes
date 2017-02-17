@@ -3,15 +3,16 @@ package edu.pl.pollub.controller;
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.services.MemService;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -39,6 +40,13 @@ public class MemController {
     @RequestMapping(method = RequestMethod.POST)
     public void addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@Valid @NotNull @NotBlank String memTitle) {
         memService.addMem(file,memTitle);
+    }
+
+    @RequestMapping(value = "/getFile/{fileName}/{fileType}", method = RequestMethod.GET)
+    public void downloadFile(HttpServletResponse httpServletResponse, @PathVariable String fileName, @PathVariable String fileType) throws IOException {
+        httpServletResponse.addHeader("Content-Disposition", "attachment; filename="+fileName+"."+fileType);
+        httpServletResponse.getOutputStream().write(IOUtils.toByteArray(memService.getFileForMem(fileName+"."+fileType).getInputStream()));
+        httpServletResponse.getOutputStream().close();
     }
 
 }

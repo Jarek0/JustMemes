@@ -46,7 +46,8 @@ public class MemServiceImpl implements MemService{
     @Override
     @Transactional
     public void addMem(MultipartFile file,String memTitle){
-        String fileType=file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
+        String contentType=file.getContentType();
+        String fileType=contentType.substring(contentType.lastIndexOf("/") + 1);
         Mem mem=new Mem(memTitle,fileType);
         mem=memRepository.save(mem);
         fileService.store(file,String.valueOf(mem.getId()),fileType);
