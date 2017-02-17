@@ -40582,7 +40582,6 @@
 	    _createClass(Mem, [{
 	        key: 'render',
 	        value: function render() {
-	            var mainPath = 'src/main/resources/upload-files/';
 	            return _react2.default.createElement(
 	                _reactBootstrap.Row,
 	                { className: 'mem' },
@@ -40596,7 +40595,7 @@
 	                        this.props.title
 	                    ),
 	                    _react2.default.createElement('hr', null),
-	                    _react2.default.createElement(_reactBootstrap.Image, { className: 'img-responsive center-block', src: mainPath + this.props.id + '.' + this.props.fileType }),
+	                    _react2.default.createElement(_reactBootstrap.Image, { className: 'img-responsive center-block', src: "http://localhost:8081/mem/getFile/" + this.props.id + "/" + this.props.fileType }),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'buttonTollbar' },
