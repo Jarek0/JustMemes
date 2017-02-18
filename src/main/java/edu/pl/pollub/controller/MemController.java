@@ -5,10 +5,10 @@ import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.services.MemService;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -22,24 +22,34 @@ import java.util.List;
 @RequestMapping(value = "/mem")
 public class MemController {
 
-    @Autowired
-    private MemService memService;
+    //fields
 
+    private final MemService memService;
 
+    //constructors
+
+    @Inject
+    MemController(final MemService memService){
+        this.memService=memService;
+    }
+
+    //Standard GRUD methods
+
+    @RequestMapping(method = RequestMethod.POST)
+    public void addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@Valid @NotNull @NotBlank String memTitle) {
+        memService.addMem(file,memTitle);
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Mem> findAllMemes(){
         return memService.findAllMemes();
     }
 
+    //Additional methods
+
     @RequestMapping(method = RequestMethod.GET,value = "/page/{pageNumber}")
     public List<Mem> showMemesFromPage(@PathVariable int pageNumber) throws PageNotExistException {
         return memService.showMemesFromPage(pageNumber);
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public void addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@Valid @NotNull @NotBlank String memTitle) {
-        memService.addMem(file,memTitle);
     }
 
     @RequestMapping(value = "/getFile/{fileName}/{fileType}", method = RequestMethod.GET)
