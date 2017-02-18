@@ -18,4 +18,6 @@ public interface MemService {
     void addMem(MultipartFile file, String memTitle);
 
     Resource getFileForMem(String fileName);
+
+    int getPagesCount();
 }

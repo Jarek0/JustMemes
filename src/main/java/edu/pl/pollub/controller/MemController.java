@@ -59,4 +59,9 @@ public class MemController {
         httpServletResponse.getOutputStream().close();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getPagesCount")
+    public int getPagesCount(){
+        return memService.getPagesCount();
+    }
+
 }
