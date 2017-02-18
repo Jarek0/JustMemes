@@ -31,6 +31,8 @@ public class MemServiceImpl implements MemService{
         return memRepository.findAll();
     }
 
+
+
     @Override
     @Transactional
     public List<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException {
@@ -57,5 +59,18 @@ public class MemServiceImpl implements MemService{
     @Transactional
     public Resource getFileForMem(String fileName){
         return fileService.loadAsResource(fileName);
+    }
+
+
+    @Override
+    @Transactional
+    public int getPagesCount(){
+        int pagesCount, memCount = memRepository.findAll().size();
+        if(memCount <= 7) pagesCount=1;
+        else if(memCount > 7 && (memCount%7) !=0)
+            pagesCount = memCount/7 + 1;
+        else
+            pagesCount = memCount/7;
+        return pagesCount;
     }
 }
