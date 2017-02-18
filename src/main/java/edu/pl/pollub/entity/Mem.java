@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 /**
  * Created by Dell on 2017-01-26.
@@ -19,18 +19,20 @@ public class Mem {
     private String title;
 
     private String fileType;
-/* this will be useful if sort memes by id is not good idea
-    private Timestamp createDate;
 
-    private Timestamp modifyDate;*/
+    private Timestamp createdDate;
+
+    private Timestamp modifyDate;
 
     public Mem(){
 
     }
 
-    public Mem(String title,String fileType){
+    public Mem(String title,String fileType,Timestamp createdDate){
         this.title=title;
         this.fileType=fileType;
+        this.modifyDate=createdDate;
+        this.createdDate=createdDate;
     }
 
     public long getId() {
@@ -57,20 +59,20 @@ public class Mem {
         this.fileType = fileType;
     }
 
-  /*  public Timestamp getCreateDate() {
-        return createDate;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 
     public Timestamp getModifyDate() {
         return modifyDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
     }
 
     public void setModifyDate(Timestamp modifyDate) {
         this.modifyDate = modifyDate;
-    }*/
+    }
 
 }

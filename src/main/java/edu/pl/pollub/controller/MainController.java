@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Created by Dell on 2017-01-27.
  */
 @Controller
-public class HomeController {
+public class MainController {
     @RequestMapping(value = "/")
     public String index() {
         return "index";

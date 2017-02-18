@@ -2,16 +2,17 @@ package edu.pl.pollub.services.implementation;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.exception.PageNotExistException;
-import edu.pl.pollub.exception.StorageException;
 import edu.pl.pollub.repository.MemRepository;
 import edu.pl.pollub.services.FileService;
 import edu.pl.pollub.services.MemService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -19,11 +20,34 @@ import java.util.List;
  */
 @Service
 public class MemServiceImpl implements MemService{
-    @Autowired
-    private MemRepository memRepository;
 
-    @Autowired
-    private FileService fileService;
+    //fields
+
+    private final MemRepository memRepository;
+
+    private final FileService fileService;
+
+    //constructors
+
+    @Inject
+    MemServiceImpl(final MemRepository memRepository, final FileService fileService){
+        this.fileService=fileService;
+        this.memRepository=memRepository;
+    }
+
+    //standard GRUD methods
+
+    @Override
+    @Transactional
+    public void addMem(MultipartFile file,String memTitle){
+        String contentType=file.getContentType();
+        String fileType=contentType.substring(contentType.lastIndexOf("/") + 1);
+        Mem mem=new Mem(memTitle,fileType,new Timestamp(System.currentTimeMillis()));
+        mem=memRepository.save(mem);
+        fileService.store(file,String.valueOf(mem.getId()),fileType);
+    }
+
+    //additional methods
 
     @Override
     @Transactional
@@ -34,23 +58,7 @@ public class MemServiceImpl implements MemService{
     @Override
     @Transactional
     public List<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException {
-        List<Mem> memes=memRepository.findAll();
-        if(memes.size()<(pageNumber*7+pageNumber)){
-            throw new PageNotExistException(pageNumber);
-        }
-
-        return memes.subList(pageNumber*7+pageNumber,(pageNumber+1)*7+pageNumber > memes.size() ? memes.size() : (pageNumber+1)*7+pageNumber);
-
-    }
-
-    @Override
-    @Transactional
-    public void addMem(MultipartFile file,String memTitle){
-        String contentType=file.getContentType();
-        String fileType=contentType.substring(contentType.lastIndexOf("/") + 1);
-        Mem mem=new Mem(memTitle,fileType);
-        mem=memRepository.save(mem);
-        fileService.store(file,String.valueOf(mem.getId()),fileType);
+        return memRepository.getMemesFromPage(new PageRequest(pageNumber*7+pageNumber, (pageNumber+1)*7+pageNumber));
     }
 
     @Override
