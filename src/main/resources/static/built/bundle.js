@@ -21547,23 +21547,22 @@
 	        var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this, props));
 	
 	        _this.state = { memes: [] };
+	        _this.showMemesFromPage(0);
+	
 	        return _this;
 	    }
 	
 	    _createClass(Layout, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
+	        key: 'showMemesFromPage',
+	        value: function showMemesFromPage(page) {
+	
 	            $.ajax({
-	                url: '/mem/page/' + 0,
-	                type: 'GET',
-	                cache: false,
-	                success: function (data) {
-	                    this.setState({ memes: data });
-	                }.bind(this),
-	                error: function () {
-	                    console.log('error');
-	                }.bind(this)
-	            });
+	                url: '/mem/page/' + page,
+	                type: 'GET'
+	            }).then(function (data) {
+	                this.setState({ memes: data.content });
+	            }.bind(this));
+	            window.scrollTo(0, 0);
 	        }
 	    }, {
 	        key: 'render',
@@ -21583,9 +21582,9 @@
 	                            _reactBootstrap.Col,
 	                            { sm: 12, md: 10, lg: 10, className: 'main-block' },
 	                            this.state.memes.map(function (mem) {
-	                                return _react2.default.createElement(_Mem2.default, { title: mem.title, key: mem.id, id: mem.id, fileType: mem.fileType });
+	                                return _react2.default.createElement(_Mem2.default, { title: mem.title, key: 'mem-' + mem.id, id: mem.id, fileType: mem.fileType });
 	                            }),
-	                            _react2.default.createElement(_DownPanel2.default, null)
+	                            _react2.default.createElement(_DownPanel2.default, { showMemesFromPage: this.showMemesFromPage.bind(this) })
 	                        ),
 	                        _react2.default.createElement(_reactBootstrap.Col, { sm: 0, md: 1, lg: 1 })
 	                    )
@@ -40674,10 +40673,10 @@
 	var DownPanel = function (_React$Component) {
 	    _inherits(DownPanel, _React$Component);
 	
-	    function DownPanel() {
+	    function DownPanel(props) {
 	        _classCallCheck(this, DownPanel);
 	
-	        return _possibleConstructorReturn(this, (DownPanel.__proto__ || Object.getPrototypeOf(DownPanel)).apply(this, arguments));
+	        return _possibleConstructorReturn(this, (DownPanel.__proto__ || Object.getPrototypeOf(DownPanel)).call(this, props));
 	    }
 	
 	    _createClass(DownPanel, [{
@@ -40699,7 +40698,7 @@
 	                            'Next page!'
 	                        ),
 	                        _react2.default.createElement(_reactBootstrap.Button, { bsStyle: 'primary', className: 'Random' }),
-	                        _react2.default.createElement(_ScroolMenu2.default, null),
+	                        _react2.default.createElement(_ScroolMenu2.default, { countOfPages: this.props.countOfPages, showMemesFromPage: this.props.showMemesFromPage.bind(this) }),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.Form,
 	                            { inline: true, id: 'PagePanel' },
@@ -40736,7 +40735,7 @@
 /* 434 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -40759,83 +40758,54 @@
 	var ScroolMenu = function (_React$Component) {
 	    _inherits(ScroolMenu, _React$Component);
 	
-	    function ScroolMenu() {
+	    function ScroolMenu(props) {
 	        _classCallCheck(this, ScroolMenu);
 	
-	        return _possibleConstructorReturn(this, (ScroolMenu.__proto__ || Object.getPrototypeOf(ScroolMenu)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (ScroolMenu.__proto__ || Object.getPrototypeOf(ScroolMenu)).call(this, props));
+	
+	        _this.state = { countOfPages: 0, numberOfPage: 0 };
+	        _this.getPagesCount();
+	        return _this;
 	    }
 	
 	    _createClass(ScroolMenu, [{
-	        key: "render",
+	        key: 'getPagesCount',
+	        value: function getPagesCount() {
+	
+	            $.ajax({
+	                url: '/mem/getPagesCount',
+	                type: 'GET'
+	            }).then(function (data) {
+	                this.setState({ countOfPages: data });
+	            }.bind(this));
+	        }
+	    }, {
+	        key: 'isActive',
+	        value: function isActive(value) {
+	            return value == this.state.numberOfPage ? 'active' : 'default';
+	        }
+	    }, {
+	        key: 'click',
+	        value: function click(e) {
+	            var pageNumber = e.target.getAttribute('data-value');
+	            this.setState({ numberOfPage: pageNumber });
+	            this.props.showMemesFromPage(pageNumber);
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
+	            var pagesNumbers = [];
+	            for (var i = 0; i < this.state.countOfPages; i++) {
+	                pagesNumbers.push(_react2.default.createElement(
+	                    'a',
+	                    { className: this.isActive(i), key: 'pageNumber-' + i, 'data-value': i, onClick: this.click.bind(this) },
+	                    i + 1
+	                ));
+	            }
 	            return _react2.default.createElement(
-	                "div",
-	                { className: "mcs-horizontal-example" },
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "1"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "2"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "3"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "4"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "5"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "5"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "3"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "4"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "5"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "5"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "4"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "5"
-	                ),
-	                _react2.default.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "5"
-	                )
+	                'div',
+	                { className: 'mcs-horizontal-example' },
+	                pagesNumbers
 	            );
 	        }
 	    }]);

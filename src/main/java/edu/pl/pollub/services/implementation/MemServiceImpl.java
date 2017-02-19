@@ -6,7 +6,9 @@ import edu.pl.pollub.repository.MemRepository;
 import edu.pl.pollub.services.FileService;
 import edu.pl.pollub.services.MemService;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,8 +60,8 @@ public class MemServiceImpl implements MemService{
 
     @Override
     @Transactional
-    public List<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException {
-        return memRepository.getMemesFromPage(new PageRequest(pageNumber*7+pageNumber, (pageNumber+1)*7+pageNumber));
+    public Page<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException {
+        return memRepository.findAll(new PageRequest(pageNumber, 7, Sort.Direction.DESC,"createdDate"));
     }
 
     @Override
@@ -72,12 +74,6 @@ public class MemServiceImpl implements MemService{
     @Override
     @Transactional
     public int getPagesCount(){
-        int pagesCount, memCount = memRepository.findAll().size();
-        if(memCount <= 7) pagesCount=1;
-        else if(memCount > 7 && (memCount%7) !=0)
-            pagesCount = memCount/7 + 1;
-        else
-            pagesCount = memCount/7;
-        return pagesCount;
+        return (int) Math.ceil(((double)memRepository.count())/7);
     }
 }
