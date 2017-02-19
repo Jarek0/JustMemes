@@ -22,7 +22,6 @@ public class Mem {
 
     private Timestamp createdDate;
 
-    private Timestamp modifyDate;
 
     public Mem(){
 
@@ -31,7 +30,6 @@ public class Mem {
     public Mem(String title,String fileType,Timestamp createdDate){
         this.title=title;
         this.fileType=fileType;
-        this.modifyDate=createdDate;
         this.createdDate=createdDate;
     }
 
@@ -63,16 +61,9 @@ public class Mem {
         return createdDate;
     }
 
-    public Timestamp getModifyDate() {
-        return modifyDate;
-    }
-
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 
-    public void setModifyDate(Timestamp modifyDate) {
-        this.modifyDate = modifyDate;
-    }
 
 }

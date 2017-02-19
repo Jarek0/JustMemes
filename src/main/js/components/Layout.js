@@ -9,21 +9,23 @@ export default class Layout extends React.Component{
     constructor(props) {
         super(props);
         this.state = {memes: []};
+        this.showMemesFromPage(0);
+
     }
 
-    componentDidMount() {
+
+    showMemesFromPage(page){
+
         $.ajax({
-            url: '/mem/page/'+0,
-            type: 'GET',
-            cache: false,
-            success: function(data) {
-                this.setState({ memes: data });
-            }.bind(this),
-            error: function() {
-                console.log('error');
-            }.bind(this)
-        });
+            url: '/mem/page/'+page,
+            type: 'GET'
+        }).then(function(data) {
+            this.setState({ memes: data.content });
+        }.bind(this));
+        window.scrollTo(0, 0);
     }
+
+
 
     render(){
         return (
@@ -35,10 +37,12 @@ export default class Layout extends React.Component{
                         <Col sm={12} md={10} lg={10} className="main-block">
                                 {
                                     this.state.memes.map((mem) =>
-                                        <Mem title={mem.title} key={mem.id} id={mem.id} fileType={mem.fileType} />
+                                        <Mem title={mem.title} key={'mem-'+mem.id} id={mem.id} fileType={mem.fileType} />
                                     )
+
                                 }
-                            <DownPanel />
+                            <DownPanel showMemesFromPage={this.showMemesFromPage.bind(this)}/>
+
                         </Col>
                         <Col sm={0} md={1} lg={1}/>
                     </Row>

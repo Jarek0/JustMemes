@@ -5,6 +5,10 @@ import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.services.MemService;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,15 +52,17 @@ public class MemController {
     //Additional methods
 
     @RequestMapping(method = RequestMethod.GET,value = "/page/{pageNumber}")
-    public List<Mem> showMemesFromPage(@PathVariable int pageNumber) throws PageNotExistException {
+    public Page<Mem> showMemesFromPage(@PathVariable int pageNumber) throws PageNotExistException {
         return memService.showMemesFromPage(pageNumber);
     }
 
     @RequestMapping(value = "/getFile/{fileName}/{fileType}", method = RequestMethod.GET)
-    public void downloadFile(HttpServletResponse httpServletResponse, @PathVariable String fileName, @PathVariable String fileType) throws IOException {
-        httpServletResponse.addHeader("Content-Disposition", "attachment; filename="+fileName+"."+fileType);
-        httpServletResponse.getOutputStream().write(IOUtils.toByteArray(memService.getFileForMem(fileName+"."+fileType).getInputStream()));
-        httpServletResponse.getOutputStream().close();
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, @PathVariable String fileType){
+        Resource file = memService.getFileForMem(fileName+"."+fileType);
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+file.getFilename()+"\"")
+                .body(file);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getPagesCount")

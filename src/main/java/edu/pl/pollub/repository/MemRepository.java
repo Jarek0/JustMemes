@@ -14,6 +14,4 @@ import java.util.List;
 @Repository
 public interface MemRepository extends JpaRepository<Mem,Long>{
 
-    @Query("select m from Mem m order by m.createdDate desc")
-    List<Mem> getMemesFromPage(Pageable pageable);
 }
