@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -51,6 +52,16 @@ public class MemController {
 
     //Additional methods
 
+    @RequestMapping(method = RequestMethod.GET,value = "/initialPage")
+    public Page<Mem> showMemesFromPage(HttpServletRequest request) throws PageNotExistException {
+        Object pageObject=request.getSession().getAttribute("pageNumber");
+        if(pageObject!=null) {
+            int page = (int) pageObject;
+            request.getSession().removeAttribute("pageNumber");
+            return memService.showMemesFromPage(page);
+        }
+        return memService.showMemesFromPage(1);
+    }
     @RequestMapping(method = RequestMethod.GET,value = "/page/{pageNumber}")
     public Page<Mem> showMemesFromPage(@PathVariable int pageNumber) throws PageNotExistException {
         return memService.showMemesFromPage(pageNumber);

@@ -14,7 +14,7 @@ export default class MainPage extends React.Component{
 
     componentDidMount(){
 
-        this.showMemesFromPage(1);
+        this.showInitialPage(0);
     }
 
 
@@ -27,6 +27,15 @@ export default class MainPage extends React.Component{
             this.setState({ memes: data.content });
         }.bind(this));
         window.scrollTo(0,0);
+    }
+    showInitialPage(page){
+        $.ajax({
+            url: '/mem/initialPage',
+            type: 'GET'
+        }).then(function(data) {
+            this.setState({numberOfPage:page});
+            this.setState({ memes: data.content });
+        }.bind(this));
     }
 
     componentWillReceiveProps(nextProps) {

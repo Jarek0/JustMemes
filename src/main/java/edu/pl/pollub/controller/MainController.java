@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by Dell on 2017-01-27.
  */
@@ -16,7 +18,8 @@ public class MainController {
     }
 
     @RequestMapping(method = RequestMethod.GET,value = "/{pageNumber}")
-    public String showMemesFromPage(@PathVariable int pageNumber) {
+    public String showMemesFromPage(@PathVariable int pageNumber,HttpServletRequest request) {
+        request.getSession().setAttribute("pageNumber",pageNumber);
         return "index";
     }
 }
