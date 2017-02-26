@@ -61,7 +61,11 @@ public class MemServiceImpl implements MemService{
     @Override
     @Transactional
     public Page<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException {
-        return memRepository.findAll(new PageRequest(pageNumber, 7, Sort.Direction.DESC,"createdDate"));
+        Page<Mem> page=memRepository.findAll(new PageRequest(pageNumber-1, 7, Sort.Direction.DESC,"createdDate"));
+        if(page.hasContent())
+        return page;
+
+        throw new PageNotExistException(pageNumber);
     }
 
     @Override
