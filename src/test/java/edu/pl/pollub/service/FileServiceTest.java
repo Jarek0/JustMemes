@@ -10,8 +10,11 @@ import org.mockito.Mockito;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -31,27 +34,47 @@ public class FileServiceTest {
         fileMock = Mockito.mock(MultipartFile.class);
         propertiesMock = Mockito.mock(StorageProperties.class);
         rootLocationMock = Mockito.mock(Path.class);
+        when(propertiesMock.getLocation()).thenReturn("src/main/resources/upload-files");
         createFileService=new FileServiceImpl(propertiesMock);
     }
 
-    @Test(expected = StorageException.class)
-    public void addMemWithNullFileTest(){
-        when(rootLocationMock.resolve(eq("testFile.jpeg"))).thenReturn(any(Path.class));
+    @Test
+    public void storeFileTest() throws IOException {
+        when(fileMock.isEmpty()).thenReturn(false);
+        when(fileMock.getSize()).thenReturn((long) 1048576);//1MB
+        when(rootLocationMock.resolve(eq("testFile.jpeg"))).thenReturn(Paths.get("src/main/resources/upload-files/testFile.jpeg"));
+        when(fileMock.getInputStream()).thenReturn(any(InputStream.class));
+
+        createFileService.store(fileMock,"testFile","jpeg");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addMemWithNullFileTest() throws IOException {
+        when(fileMock.isEmpty()).thenReturn(false);
+        when(fileMock.getSize()).thenReturn((long) 1048576);//1MB
+        when(rootLocationMock.resolve(eq("testFile.jpeg"))).thenReturn(Paths.get("src/main/resources/upload-files/testFile.jpeg"));
+        when(fileMock.getInputStream()).thenReturn(any(InputStream.class));
+
         createFileService.store(null,"testFile","jpeg");
     }
 
     @Test(expected = StorageException.class)
-    public void addMemWithEmptyFileTest(){
-        when(rootLocationMock.resolve(eq("testFile.jpeg"))).thenReturn(any(Path.class));
+    public void addMemWithEmptyFileTest() throws IOException {
         when(fileMock.isEmpty()).thenReturn(true);
+        when(fileMock.getSize()).thenReturn((long) 1048576);//1MB
+        when(rootLocationMock.resolve(eq("testFile.jpeg"))).thenReturn(Paths.get("src/main/resources/upload-files/testFile.jpeg"));
+        when(fileMock.getInputStream()).thenReturn(any(InputStream.class));
+
         createFileService.store(fileMock,"testFile","jpeg");
     }
 
     @Test(expected = StorageException.class)
     public void addMemWithTooBigFile() throws IOException {
-        when(fileMock.getInputStream()).thenReturn(any(InputStream.class));
-        when(rootLocationMock.resolve(eq("testFile.jpeg"))).thenReturn(any(Path.class));
+        when(fileMock.isEmpty()).thenReturn(false);
         when(fileMock.getSize()).thenReturn((long) 22020096);//21 MB
+        when(rootLocationMock.resolve(eq("testFile.jpeg"))).thenReturn(Paths.get("src/main/resources/upload-files/testFile.jpeg"));
+        when(fileMock.getInputStream()).thenReturn(any(InputStream.class));
+
         createFileService.store(fileMock,"testFile","jpeg");
     }
 
