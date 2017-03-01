@@ -2,22 +2,21 @@ package edu.pl.pollub.controller;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.exception.PageNotExistException;
-import edu.pl.pollub.services.MemService;
-import org.apache.commons.io.IOUtils;
+import edu.pl.pollub.service.MemService;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -41,8 +40,9 @@ public class MemController {
     //Standard GRUD methods
 
     @RequestMapping(method = RequestMethod.POST)
-    public void addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@Valid @NotNull @NotBlank String memTitle) {
-        memService.addMem(file,memTitle);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mem addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@Valid @NotNull @Size(min = 2, max = 35) String memTitle) {
+        return memService.addMem(file,memTitle);
     }
 
     @RequestMapping(method = RequestMethod.GET)

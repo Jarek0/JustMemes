@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
@@ -16,8 +19,11 @@ public class Mem {
     @GeneratedValue
     private long id;
 
+    @NotNull
+    @Size(min = 2, max = 35)
     private String title;
 
+    @NotNull @Size(min=3,max=4) @Pattern(regexp = "^(gif|jpeg|png|mp4)",message="invalid file type")
     private String fileType;
 
     private Timestamp createdDate;
@@ -27,9 +33,9 @@ public class Mem {
 
     }
 
-    public Mem(String title,String fileType,Timestamp createdDate){
+    public Mem(String title,String contentType,Timestamp createdDate){
         this.title=title;
-        this.fileType=fileType;
+        this.fileType=contentType.substring(contentType.lastIndexOf("/") + 1);
         this.createdDate=createdDate;
     }
 
