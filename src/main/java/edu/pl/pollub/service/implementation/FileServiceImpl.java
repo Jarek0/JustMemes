@@ -70,6 +70,14 @@ public class FileServiceImpl implements FileService{
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+
+    }
+    @Override
+    public void delete(Path path) throws IOException {
+        if(Files.exists(path))
+        Files.delete(path);
+
+        throw new StorageFileNotFoundException("file of path: "+path.getFileName()+" not exist");
     }
     @Override
     public void init() {
