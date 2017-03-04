@@ -1,6 +1,7 @@
 package edu.pl.pollub.service;
 
 import edu.pl.pollub.entity.Mem;
+import edu.pl.pollub.entity.enums.Status;
 import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.exception.StorageException;
 import edu.pl.pollub.repository.MemRepository;
@@ -52,7 +53,7 @@ public class MemServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void showMemesFromPageWithInvalidNumberTest() throws Exception{
-        createMemService.showMemesFromPage(-5);
+        createMemService.showMemesFromPage(-5, Status.NEW);
     }
 
 

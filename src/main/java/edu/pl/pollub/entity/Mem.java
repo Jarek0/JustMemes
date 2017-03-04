@@ -1,9 +1,8 @@
 package edu.pl.pollub.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import edu.pl.pollub.entity.enums.Status;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -28,6 +27,16 @@ public class Mem {
 
     private Timestamp createdDate;
 
+    private Status status;
+
+    @Enumerated(EnumType.STRING)
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public Mem(){
 
@@ -37,6 +46,7 @@ public class Mem {
         this.title=title;
         this.fileType=contentType.substring(contentType.lastIndexOf("/") + 1);
         this.createdDate=createdDate;
+        this.status=Status.MAIN_PAGE;
     }
 
     public long getId() {

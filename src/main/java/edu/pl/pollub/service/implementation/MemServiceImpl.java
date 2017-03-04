@@ -1,6 +1,7 @@
 package edu.pl.pollub.service.implementation;
 
 import edu.pl.pollub.entity.Mem;
+import edu.pl.pollub.entity.enums.Status;
 import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.repository.MemRepository;
 import edu.pl.pollub.service.FileService;
@@ -59,13 +60,15 @@ public class MemServiceImpl implements MemService{
 
     @Override
     @Transactional
-    public Page<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException {
-        Page<Mem> page=memRepository.findAll(new PageRequest(pageNumber-1, 7, Sort.Direction.DESC,"createdDate"));
+    public Page<Mem> showMemesFromPage(int pageNumber,Status status) throws PageNotExistException {
+        Page<Mem> page=memRepository.findAll(status,new PageRequest(pageNumber-1, 7, Sort.Direction.DESC,"createdDate"));
         if(page.hasContent())
         return page;
 
         throw new PageNotExistException(pageNumber);
     }
+
+
 
     @Override
     @Transactional
@@ -76,7 +79,13 @@ public class MemServiceImpl implements MemService{
 
     @Override
     @Transactional
-    public int getPagesCount(){
-        return (int) Math.ceil(((double)memRepository.count())/7);
+    public int getMainPagePagesCount(Status status){
+        return (int) Math.ceil(((double)memRepository.count(status))/7);
+    }
+
+    @Override
+    @Transactional
+    public int getWaitingRoomPagesCount(Status status){
+        return (int) Math.ceil(((double)memRepository.count(status))/7);
     }
 }

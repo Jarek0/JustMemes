@@ -1,6 +1,7 @@
 package edu.pl.pollub.service;
 
 import edu.pl.pollub.entity.Mem;
+import edu.pl.pollub.entity.enums.Status;
 import edu.pl.pollub.exception.PageNotExistException;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -14,11 +15,13 @@ import java.util.List;
 public interface MemService {
     List<Mem> findAllMemes();
 
-    Page<Mem> showMemesFromPage(int pageNumber) throws PageNotExistException;
+    Page<Mem> showMemesFromPage(int pageNumber,Status status) throws PageNotExistException;
 
     Mem addMem(MultipartFile file, String memTitle);
 
     Resource getFileForMem(String fileName);
 
-    int getPagesCount();
+    int getMainPagePagesCount(Status status);
+
+    int getWaitingRoomPagesCount(Status status);
 }

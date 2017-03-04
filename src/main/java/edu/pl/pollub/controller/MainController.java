@@ -17,9 +17,11 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping(method = RequestMethod.GET,value = "/{pageNumber}")
-    public String showMemesFromPage(@PathVariable int pageNumber,HttpServletRequest request) {
+    @RequestMapping(method = RequestMethod.GET,value = {"{pageNumber}","/waiting/{pageNumber}"})
+    public String showMemesFromMainPage(@PathVariable int pageNumber,HttpServletRequest request) {
         request.getSession().setAttribute("pageNumber",pageNumber);
         return "index";
     }
+
+
 }

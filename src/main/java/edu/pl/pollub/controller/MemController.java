@@ -1,6 +1,7 @@
 package edu.pl.pollub.controller;
 
 import edu.pl.pollub.entity.Mem;
+import edu.pl.pollub.entity.enums.Status;
 import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.service.MemService;
 import org.hibernate.validator.constraints.NotBlank;
@@ -58,13 +59,28 @@ public class MemController {
         if(pageObject!=null) {
             int page = (int) pageObject;
             request.getSession().removeAttribute("pageNumber");
-            return memService.showMemesFromPage(page);
+            return memService.showMemesFromPage(page, Status.MAIN_PAGE);
         }
-        return memService.showMemesFromPage(1);
+        return memService.showMemesFromPage(1,Status.MAIN_PAGE);
+    }
+    @RequestMapping(method = RequestMethod.GET,value = "/waiting/initialPage")
+    public Page<Mem> showMemesWaitingRoom(HttpServletRequest request) throws PageNotExistException {
+        Object pageObject=request.getSession().getAttribute("pageNumber");
+        if(pageObject!=null) {
+            int page = (int) pageObject;
+            request.getSession().removeAttribute("pageNumber");
+            return memService.showMemesFromPage(page, Status.ACCEPTED);
+        }
+        return memService.showMemesFromPage(1,Status.ACCEPTED);
     }
     @RequestMapping(method = RequestMethod.GET,value = "/page/{pageNumber}")
-    public Page<Mem> showMemesFromPage(@PathVariable int pageNumber) throws PageNotExistException {
-        return memService.showMemesFromPage(pageNumber);
+    public Page<Mem> showMemesFromMainPage(@PathVariable int pageNumber) throws PageNotExistException {
+        return memService.showMemesFromPage(pageNumber, Status.MAIN_PAGE);
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/waiting/{pageNumber}")
+    public Page<Mem> showMemesFromWaitingRoom(@PathVariable int pageNumber) throws PageNotExistException {
+        return memService.showMemesFromPage(pageNumber, Status.ACCEPTED);
     }
 
     @RequestMapping(value = "/getFile/{fileName}/{fileType}", method = RequestMethod.GET)
@@ -77,8 +93,13 @@ public class MemController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getPagesCount")
-    public int getPagesCount(){
-        return memService.getPagesCount();
+    public int getMainPagePagesCount(){
+        return memService.getMainPagePagesCount(Status.MAIN_PAGE);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/waiting/getPagesCount")
+    public int getWaitingRoomPagesCount(){
+        return memService.getWaitingRoomPagesCount(Status.ACCEPTED);
     }
 
 }
