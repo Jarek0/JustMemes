@@ -9,15 +9,20 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.sql.Timestamp;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,15 +52,15 @@ public class MemControllerTest {
 
     @Test
     public void addMemSuccessfully() throws Exception {
-        given(memServiceMock.addMem(mockfile,"myFile")).willReturn(new Mem("myFile","txt",new Timestamp(System.currentTimeMillis())));
+        when(memServiceMock.addMem(eq(mockfile),eq("myFile"))).thenReturn(new Mem("myFile","txt",new Timestamp(System.currentTimeMillis())));
+
 
         mockMvc.perform(MockMvcRequestBuilders.fileUpload("/mem")
                 .file(mockfile)
-                .content("myFile"))
+                .param("memTitle","myFile"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title", is("myFile")))
                 .andExpect(jsonPath("$.id", notNullValue()));
     }
-
 
 }

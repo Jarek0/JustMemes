@@ -41,7 +41,7 @@ public class MemController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public Mem addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@Valid @NotNull @Size(min = 2, max = 35) String memTitle) {
+    public Mem addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@RequestParam("memTitle") @Valid @NotNull @Size(min = 2, max = 35) String memTitle) {
         return memService.addMem(file,memTitle);
     }
 
