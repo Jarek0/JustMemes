@@ -45,7 +45,7 @@ export default class MainPage extends React.Component{
             }).bind(this),
             error: (function (xhr, ajaxOptions, thrownError) {
                 this.setState({errorStatus: xhr.status});
-                this.setState({errorMessage:  (JSON.parse(xhr.responseText)).message});
+                this.setState({errorMessage: xhr.responseText});
             }).bind(this)
         });
     }
