@@ -46147,7 +46147,11 @@
 	
 	var _Mem2 = _interopRequireDefault(_Mem);
 	
-	var _DownPanel = __webpack_require__(503);
+	var _Error = __webpack_require__(503);
+	
+	var _Error2 = _interopRequireDefault(_Error);
+	
+	var _DownPanel = __webpack_require__(504);
 	
 	var _DownPanel2 = _interopRequireDefault(_DownPanel);
 	
@@ -46169,7 +46173,7 @@
 	
 	        var _this = _possibleConstructorReturn(this, (MainPage.__proto__ || Object.getPrototypeOf(MainPage)).call(this, props));
 	
-	        _this.state = { memes: [], numberOfPage: 0 };
+	        _this.state = { memes: [], numberOfPage: 0, errorStatus: "", errorMessage: "" };
 	
 	        return _this;
 	    }
@@ -46185,11 +46189,17 @@
 	        value: function showMemesFromPage(page) {
 	            $.ajax({
 	                url: '/mem/page/' + page,
-	                type: 'GET'
-	            }).then(function (data) {
-	                this.setState({ numberOfPage: page });
-	                this.setState({ memes: data.content });
-	            }.bind(this));
+	                type: 'GET',
+	                success: function (data) {
+	                    this.setState({ numberOfPage: page });
+	                    this.setState({ memes: data.content });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    this.setState({ errorStatus: xhr.status });
+	                    this.setState({ errorMessage: xhr.responseText });
+	                }.bind(this)
+	            });
+	
 	            window.scrollTo(0, 0);
 	        }
 	    }, {
@@ -46197,11 +46207,16 @@
 	        value: function showInitialPage(page) {
 	            $.ajax({
 	                url: '/mem/initialPage',
-	                type: 'GET'
-	            }).then(function (data) {
-	                this.setState({ numberOfPage: page });
-	                this.setState({ memes: data.content });
-	            }.bind(this));
+	                type: 'GET',
+	                success: function (data) {
+	                    this.setState({ numberOfPage: page });
+	                    this.setState({ memes: data.content });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    this.setState({ errorStatus: xhr.status });
+	                    this.setState({ errorMessage: JSON.parse(xhr.responseText).message });
+	                }.bind(this)
+	            });
 	        }
 	    }, {
 	        key: 'componentWillReceiveProps',
@@ -46214,15 +46229,22 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                this.state.memes.map(function (mem) {
-	                    return _react2.default.createElement(_Mem2.default, { title: mem.title, key: 'mem-' + mem.id, id: mem.id, fileType: mem.fileType });
-	                }),
-	                _react2.default.createElement(_DownPanel2.default, { numberOfPage: this.state.numberOfPage })
-	            );
+	            if (this.state.errorMessage.length === 0 && this.state.errorStatus.length === 0) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.state.memes.map(function (mem) {
+	                        return _react2.default.createElement(_Mem2.default, { title: mem.title, key: 'mem-' + mem.id, id: mem.id, fileType: mem.fileType });
+	                    }),
+	                    _react2.default.createElement(_DownPanel2.default, { numberOfPage: this.state.numberOfPage })
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(_Error2.default, { status: this.state.errorStatus, mess: this.state.errorMessage })
+	                );
+	            }
 	        }
 	    }]);
 	
@@ -46344,7 +46366,76 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ScroolMenu = __webpack_require__(504);
+	var _reactBootstrap = __webpack_require__(235);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Error = function (_React$Component) {
+	    _inherits(Error, _React$Component);
+	
+	    function Error() {
+	        _classCallCheck(this, Error);
+	
+	        return _possibleConstructorReturn(this, (Error.__proto__ || Object.getPrototypeOf(Error)).apply(this, arguments));
+	    }
+	
+	    _createClass(Error, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _reactBootstrap.Row,
+	                { className: 'mem' },
+	                _react2.default.createElement(_reactBootstrap.Col, { sm: 0, md: 1 }),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Col,
+	                    { sm: 12, md: 10 },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'Status: ',
+	                        this.props.status
+	                    ),
+	                    _react2.default.createElement('hr', null),
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        'Message: ',
+	                        this.props.mess
+	                    )
+	                ),
+	                _react2.default.createElement(_reactBootstrap.Col, { sm: 0, md: 1 })
+	            );
+	        }
+	    }]);
+	
+	    return Error;
+	}(_react2.default.Component);
+	
+	exports.default = Error;
+
+/***/ },
+/* 504 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _ScroolMenu = __webpack_require__(505);
 	
 	var _ScroolMenu2 = _interopRequireDefault(_ScroolMenu);
 	
@@ -46440,7 +46531,7 @@
 	;
 
 /***/ },
-/* 504 */
+/* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
