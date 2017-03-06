@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class MainController {
-    @RequestMapping(method = RequestMethod.GET,value = "/")
+    @RequestMapping(method = RequestMethod.GET,value ={"/waiting","/"} )
     public String index() {
         return "index";
     }
 
-    @RequestMapping(method = RequestMethod.GET,value = {"{pageNumber}","/waiting/{pageNumber}"})
+    @RequestMapping(method = RequestMethod.GET,value = {"/waiting/{pageNumber}","{pageNumber}"})
     public String showMemesFromMainPage(@PathVariable int pageNumber,HttpServletRequest request) {
         request.getSession().setAttribute("pageNumber",pageNumber);
         return "index";
