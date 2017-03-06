@@ -28,7 +28,7 @@ export default class DownPanel extends React.Component{
                 <Col sm={12} md={10} >
                     <div className="buttonTollbar">
                         <Button bsStyle="primary" onClick={this.nextPage.bind(this)} className="NextPage">Next page!</Button><Button bsStyle="primary" className="Random"></Button>
-                    <ScroolMenu numberOfPage={this.props.numberOfPage}/>
+                    <ScroolMenu page={this.props.page} numberOfPage={this.props.numberOfPage}/>
                         <Form inline id="PagePanel">
                             <FormGroup controlId="formInlinePage">
                                 <ControlLabel>Page:</ControlLabel>

@@ -14,9 +14,8 @@ export default class ScroolMenu extends React.Component{
     }
 
     getPagesCount(){
-
         $.ajax({
-            url: '/mem/getPagesCount',
+            url: (this.props.page=="main_page") ? '/mem/getPagesCount' : '/mem/waiting/getPagesCount',
             type: 'GET'
         }).then(function(data) {
             this.setState({ countOfPages:data });
@@ -32,7 +31,7 @@ export default class ScroolMenu extends React.Component{
     render(){
         var pagesNumbers = [];
         for (var i=1; i < this.state.countOfPages+1; i++) {
-            pagesNumbers.push(<Link className={this.isActive(i)} key={'pageNumber-'+i} to={'/'+(i)}>{i}</Link>);
+            pagesNumbers.push(<Link className={this.isActive(i)} key={'pageNumber-'+i} to={(this.props.page=="main_page") ? '/'+(i) : '/waiting/'+(i)}>{i}</Link>);
         }
         return (
             <div className="mcs-horizontal-example">

@@ -1,6 +1,7 @@
 package edu.pl.pollub.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.pl.pollub.controller.restController.MemController;
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.service.MemService;
 import org.junit.Before;
@@ -9,12 +10,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.sql.Timestamp;
 

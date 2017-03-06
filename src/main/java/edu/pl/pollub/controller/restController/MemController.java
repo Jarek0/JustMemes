@@ -1,4 +1,4 @@
-package edu.pl.pollub.controller;
+package edu.pl.pollub.controller.restController;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.entity.enums.Status;

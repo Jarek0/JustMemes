@@ -9,45 +9,43 @@ export default class MainPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {memes: [],numberOfPage: 0,errorStatus: "",errorMessage: ""};
-
-
     }
 
     componentDidMount(){
-
         this.showInitialPage(0);
     }
 
     showMemesFromPage(page){
-        $.ajax({
-            url: '/mem/page/'+page,
-            type: 'GET',
-            success: (function(data) {
-                this.setState({numberOfPage:page});
-                this.setState({ memes: data.content });
-            }).bind(this),
-            error: (function (xhr, ajaxOptions, thrownError) {
-                this.setState({errorStatus: xhr.status});
-                this.setState({errorMessage: xhr.responseText});
-            }).bind(this)
-        })
-        
+            $.ajax({
+                url: '/mem/page/'+page,
+                type: 'GET',
+                success: (function(data) {
+                    this.setState({numberOfPage:page});
+                    this.setState({ memes: data.content });
+                }).bind(this),
+                error: (function (xhr, ajaxOptions, thrownError) {
+                    this.setState({errorStatus: xhr.status});
+                    this.setState({errorMessage: xhr.responseText});
+                }).bind(this)
+            })
 
         window.scrollTo(0,0);
     }
     showInitialPage(page){
-        $.ajax({
-            url: '/mem/initialPage',
-            type: 'GET',
-            success: (function(data) {
-                this.setState({numberOfPage:page});
-                this.setState({ memes: data.content });
-            }).bind(this),
-            error: (function (xhr, ajaxOptions, thrownError) {
-                this.setState({errorStatus: xhr.status});
-                this.setState({errorMessage: xhr.responseText});
-            }).bind(this)
-        });
+        console.log("Welcome on main page!");
+            $.ajax({
+                url: '/mem/initialPage',
+                type: 'GET',
+                success: (function(data) {
+                    this.setState({numberOfPage:page});
+                    this.setState({ memes: data.content });
+                }).bind(this),
+                error: (function (xhr, ajaxOptions, thrownError) {
+                    this.setState({errorStatus: xhr.status});
+                    this.setState({errorMessage: xhr.responseText});
+                }).bind(this)
+            });
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -67,7 +65,7 @@ export default class MainPage extends React.Component{
                         )
 
                     }
-                    <DownPanel numberOfPage={this.state.numberOfPage}/>
+                    <DownPanel page="main_page" numberOfPage={this.state.numberOfPage}/>
                 </div>);
         }
         else{

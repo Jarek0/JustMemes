@@ -64,6 +64,10 @@
 	
 	var _MainPage2 = _interopRequireDefault(_MainPage);
 	
+	var _WaitingRoom = __webpack_require__(506);
+	
+	var _WaitingRoom2 = _interopRequireDefault(_WaitingRoom);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_reactDom2.default.render(_react2.default.createElement(
@@ -73,7 +77,9 @@
 	        _reactRouter.Route,
 	        { path: '/', component: _Layout2.default },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _MainPage2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '(:page)', component: _MainPage2.default })
+	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting', name: 'waiting_room', component: _WaitingRoom2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting/(:page)', name: 'waiting_room', component: _WaitingRoom2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '(:page)', name: 'main_page', component: _MainPage2.default })
 	    )
 	), document.getElementById('layout'));
 
@@ -26642,6 +26648,8 @@
 	
 	var _reactBootstrap = __webpack_require__(235);
 	
+	var _reactRouter = __webpack_require__(178);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26660,6 +26668,11 @@
 	    }
 	
 	    _createClass(Navigator, [{
+	        key: 'navigate',
+	        value: function navigate(e) {
+	            _reactRouter.browserHistory.push(e);
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -26673,7 +26686,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: '#' },
+	                            { href: '/' },
 	                            _react2.default.createElement('img', { src: 'built/images/logo.png', alt: 'JustMemes' })
 	                        )
 	                    ),
@@ -26687,17 +26700,17 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavItem,
-	                            { eventKey: 1, href: '#' },
+	                            { onClick: this.navigate.bind(this, "waiting") },
 	                            'Waiting room'
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavItem,
-	                            { eventKey: 2, href: '#' },
+	                            { onClick: this.navigate.bind(this, "top") },
 	                            'Top'
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavItem,
-	                            { eventKey: 2, href: '#' },
+	                            { onClick: this.navigate.bind(this, "random") },
 	                            'Random'
 	                        )
 	                    ),
@@ -46174,14 +46187,12 @@
 	        var _this = _possibleConstructorReturn(this, (MainPage.__proto__ || Object.getPrototypeOf(MainPage)).call(this, props));
 	
 	        _this.state = { memes: [], numberOfPage: 0, errorStatus: "", errorMessage: "" };
-	
 	        return _this;
 	    }
 	
 	    _createClass(MainPage, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	
 	            this.showInitialPage(0);
 	        }
 	    }, {
@@ -46205,6 +46216,7 @@
 	    }, {
 	        key: 'showInitialPage',
 	        value: function showInitialPage(page) {
+	            console.log("Welcome on main page!");
 	            $.ajax({
 	                url: '/mem/initialPage',
 	                type: 'GET',
@@ -46236,7 +46248,7 @@
 	                    this.state.memes.map(function (mem) {
 	                        return _react2.default.createElement(_Mem2.default, { title: mem.title, key: 'mem-' + mem.id, id: mem.id, fileType: mem.fileType });
 	                    }),
-	                    _react2.default.createElement(_DownPanel2.default, { numberOfPage: this.state.numberOfPage })
+	                    _react2.default.createElement(_DownPanel2.default, { page: 'main_page', numberOfPage: this.state.numberOfPage })
 	                );
 	            } else {
 	                return _react2.default.createElement(
@@ -46497,7 +46509,7 @@
 	                            'Next page!'
 	                        ),
 	                        _react2.default.createElement(_reactBootstrap.Button, { bsStyle: 'primary', className: 'Random' }),
-	                        _react2.default.createElement(_ScroolMenu2.default, { numberOfPage: this.props.numberOfPage }),
+	                        _react2.default.createElement(_ScroolMenu2.default, { page: this.props.page, numberOfPage: this.props.numberOfPage }),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.Form,
 	                            { inline: true, id: 'PagePanel' },
@@ -46534,7 +46546,7 @@
 /* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -46569,40 +46581,39 @@
 	    }
 	
 	    _createClass(ScroolMenu, [{
-	        key: 'componentDidMount',
+	        key: "componentDidMount",
 	        value: function componentDidMount() {
 	            this.getPagesCount();
 	        }
 	    }, {
-	        key: 'getPagesCount',
+	        key: "getPagesCount",
 	        value: function getPagesCount() {
-	
 	            $.ajax({
-	                url: '/mem/getPagesCount',
+	                url: this.props.page == "main_page" ? '/mem/getPagesCount' : '/mem/waiting/getPagesCount',
 	                type: 'GET'
 	            }).then(function (data) {
 	                this.setState({ countOfPages: data });
 	            }.bind(this));
 	        }
 	    }, {
-	        key: 'isActive',
+	        key: "isActive",
 	        value: function isActive(value) {
 	            return value == this.props.numberOfPage ? 'active' : 'default';
 	        }
 	    }, {
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var pagesNumbers = [];
 	            for (var i = 1; i < this.state.countOfPages + 1; i++) {
 	                pagesNumbers.push(_react2.default.createElement(
 	                    _reactRouter.Link,
-	                    { className: this.isActive(i), key: 'pageNumber-' + i, to: '/' + i },
+	                    { className: this.isActive(i), key: 'pageNumber-' + i, to: this.props.page == "main_page" ? '/' + i : '/waiting/' + i },
 	                    i
 	                ));
 	            }
 	            return _react2.default.createElement(
-	                'div',
-	                { className: 'mcs-horizontal-example' },
+	                "div",
+	                { className: "mcs-horizontal-example" },
 	                pagesNumbers
 	            );
 	        }
@@ -46613,6 +46624,131 @@
 	
 	exports.default = ScroolMenu;
 	;
+
+/***/ },
+/* 506 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Mem = __webpack_require__(502);
+	
+	var _Mem2 = _interopRequireDefault(_Mem);
+	
+	var _Error = __webpack_require__(503);
+	
+	var _Error2 = _interopRequireDefault(_Error);
+	
+	var _DownPanel = __webpack_require__(504);
+	
+	var _DownPanel2 = _interopRequireDefault(_DownPanel);
+	
+	var _reactBootstrap = __webpack_require__(235);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var WaitingRoom = function (_React$Component) {
+	    _inherits(WaitingRoom, _React$Component);
+	
+	    function WaitingRoom(props) {
+	        _classCallCheck(this, WaitingRoom);
+	
+	        var _this = _possibleConstructorReturn(this, (WaitingRoom.__proto__ || Object.getPrototypeOf(WaitingRoom)).call(this, props));
+	
+	        _this.state = { memes: [], numberOfPage: 0, errorStatus: "", errorMessage: "" };
+	        return _this;
+	    }
+	
+	    _createClass(WaitingRoom, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.showInitialPage(0);
+	        }
+	    }, {
+	        key: 'showMemesFromPage',
+	        value: function showMemesFromPage(page) {
+	            $.ajax({
+	                url: '/mem/waiting/' + page,
+	                type: 'GET',
+	                success: function (data) {
+	                    this.setState({ numberOfPage: page });
+	                    this.setState({ memes: data.content });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    this.setState({ errorStatus: xhr.status });
+	                    this.setState({ errorMessage: xhr.responseText });
+	                }.bind(this)
+	            });
+	
+	            window.scrollTo(0, 0);
+	        }
+	    }, {
+	        key: 'showInitialPage',
+	        value: function showInitialPage(page) {
+	            console.log("Welcome on waiting page!");
+	            $.ajax({
+	                url: '/mem/waiting/initialPage',
+	                type: 'GET',
+	                success: function (data) {
+	                    this.setState({ numberOfPage: page });
+	                    this.setState({ memes: data.content });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    this.setState({ errorStatus: xhr.status });
+	                    this.setState({ errorMessage: xhr.responseText });
+	                }.bind(this)
+	            });
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (nextProps.params.page !== this.props.params.page || nextProps.params.page !== undefined) {
+	                this.props.params.page = nextProps.params.page;
+	                this.showMemesFromPage(this.props.params.page);
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.errorMessage.length === 0 && this.state.errorStatus.length === 0) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.state.memes.map(function (mem) {
+	                        return _react2.default.createElement(_Mem2.default, { title: mem.title, key: 'mem-' + mem.id, id: mem.id, fileType: mem.fileType });
+	                    }),
+	                    _react2.default.createElement(_DownPanel2.default, { page: 'waiting_room', numberOfPage: this.state.numberOfPage })
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(_Error2.default, { status: this.state.errorStatus, mess: this.state.errorMessage })
+	                );
+	            }
+	        }
+	    }]);
+	
+	    return WaitingRoom;
+	}(_react2.default.Component);
+	
+	exports.default = WaitingRoom;
 
 /***/ }
 /******/ ]);

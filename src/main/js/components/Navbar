@@ -1,22 +1,28 @@
 import React from 'react';
 import {Navbar,Header,Brand,Nav,Toggle,NavItem,Collapse,MenuItem,NavDropdown} from 'react-bootstrap';
+import { browserHistory } from 'react-router';
+
 
 export default class Navigator extends React.Component{
+
+    navigate(e){
+        browserHistory.push(e);
+    }
 
     render(){
         return (
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#"><img src="built/images/logo.png" alt="JustMemes"/></a>
+                        <a href="/"><img src="built/images/logo.png" alt="JustMemes"/></a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav>
-                        <NavItem eventKey={1} href="#">Waiting room</NavItem>
-                        <NavItem eventKey={2} href="#">Top</NavItem>
-                        <NavItem eventKey={2} href="#">Random</NavItem>
+                        <NavItem onClick={this.navigate.bind(this,"waiting")}>Waiting room</NavItem>
+                        <NavItem onClick={this.navigate.bind(this,"top")}>Top</NavItem>
+                        <NavItem onClick={this.navigate.bind(this,"random")}>Random</NavItem>
                     </Nav>
                     <Nav pullRight>
                         <NavDropdown eventKey={3} id="dropdown" noCaret
