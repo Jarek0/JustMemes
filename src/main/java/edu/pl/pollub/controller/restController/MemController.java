@@ -53,26 +53,6 @@ public class MemController {
 
     //Additional methods
 
-    @RequestMapping(method = RequestMethod.GET,value = "/initialPage")
-    public Page<Mem> showMemesFromPage(HttpServletRequest request) throws PageNotExistException {
-        Object pageObject=request.getSession().getAttribute("pageNumber");
-        if(pageObject!=null) {
-            int page = (int) pageObject;
-            request.getSession().removeAttribute("pageNumber");
-            return memService.showMemesFromPage(page, Status.MAIN_PAGE);
-        }
-        return memService.showMemesFromPage(1,Status.MAIN_PAGE);
-    }
-    @RequestMapping(method = RequestMethod.GET,value = "/waiting/initialPage")
-    public Page<Mem> showMemesWaitingRoom(HttpServletRequest request) throws PageNotExistException {
-        Object pageObject=request.getSession().getAttribute("pageNumber");
-        if(pageObject!=null) {
-            int page = (int) pageObject;
-            request.getSession().removeAttribute("pageNumber");
-            return memService.showMemesFromPage(page, Status.ACCEPTED);
-        }
-        return memService.showMemesFromPage(1,Status.ACCEPTED);
-    }
     @RequestMapping(method = RequestMethod.GET,value = "/page/{pageNumber}")
     public Page<Mem> showMemesFromMainPage(@PathVariable int pageNumber) throws PageNotExistException {
         return memService.showMemesFromPage(pageNumber, Status.MAIN_PAGE);

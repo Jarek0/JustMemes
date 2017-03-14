@@ -2,10 +2,26 @@ import React from 'react';
 import Navigator from './Navbar';
 import Footer from './Footer';
 import {Grid,Row,Col} from 'react-bootstrap';
+import { browserHistory } from 'react-router';
 
 export default class Layout extends React.Component{
     constructor(props) {
         super(props);
+    }
+
+    getPathAfterReload(){
+        $.ajax({
+            url: '/getPathAfterReload',
+            type: 'GET',
+            success: (function(data) {
+                console.log(data.content);
+                browserHistory.push(data.content);
+            }).bind(this),
+            error: (function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status+":"+xhr.responseText)
+            }).bind(this)
+        });
+
     }
 
     render(){

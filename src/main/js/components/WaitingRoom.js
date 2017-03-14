@@ -12,7 +12,13 @@ export default class WaitingRoom extends React.Component{
     }
 
     componentDidMount(){
-        this.showInitialPage(0);
+        console.log("waitingRoom");
+        if(this.props.params.page===undefined){
+            this.showMemesFromPage(1);
+            return;
+        }
+
+        this.showMemesFromPage(this.props.params.page);
     }
 
     showMemesFromPage(page){
@@ -30,22 +36,6 @@ export default class WaitingRoom extends React.Component{
         })
 
         window.scrollTo(0,0);
-    }
-    showInitialPage(page){
-        console.log("Welcome on waiting page!");
-        $.ajax({
-            url: '/mem/waiting/initialPage',
-            type: 'GET',
-            success: (function(data) {
-                this.setState({numberOfPage:page});
-                this.setState({ memes: data.content });
-            }).bind(this),
-            error: (function (xhr, ajaxOptions, thrownError) {
-                this.setState({errorStatus: xhr.status});
-                this.setState({errorMessage: xhr.responseText});
-            }).bind(this)
-        });
-
     }
 
     componentWillReceiveProps(nextProps) {
@@ -65,7 +55,7 @@ export default class WaitingRoom extends React.Component{
                         )
 
                     }
-                    <DownPanel page="waiting_room" numberOfPage={this.state.numberOfPage}/>
+                    <DownPanel page="/waiting/" numberOfPage={this.state.numberOfPage}/>
                 </div>);
         }
         else{

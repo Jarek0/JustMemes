@@ -12,8 +12,15 @@ export default class MainPage extends React.Component{
     }
 
     componentDidMount(){
-        this.showInitialPage(0);
+        console.log("mainPage");
+        if(this.props.params.page===undefined){
+            this.showMemesFromPage(1);
+            return;
+        }
+
+        this.showMemesFromPage(this.props.params.page);
     }
+
 
     showMemesFromPage(page){
             $.ajax({
@@ -30,22 +37,6 @@ export default class MainPage extends React.Component{
             })
 
         window.scrollTo(0,0);
-    }
-    showInitialPage(page){
-        console.log("Welcome on main page!");
-            $.ajax({
-                url: '/mem/initialPage',
-                type: 'GET',
-                success: (function(data) {
-                    this.setState({numberOfPage:page});
-                    this.setState({ memes: data.content });
-                }).bind(this),
-                error: (function (xhr, ajaxOptions, thrownError) {
-                    this.setState({errorStatus: xhr.status});
-                    this.setState({errorMessage: xhr.responseText});
-                }).bind(this)
-            });
-
     }
 
     componentWillReceiveProps(nextProps) {
@@ -65,7 +56,7 @@ export default class MainPage extends React.Component{
                         )
 
                     }
-                    <DownPanel page="main_page" numberOfPage={this.state.numberOfPage}/>
+                    <DownPanel page="/" numberOfPage={this.state.numberOfPage}/>
                 </div>);
         }
         else{

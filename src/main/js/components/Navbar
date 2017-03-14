@@ -14,7 +14,7 @@ export default class Navigator extends React.Component{
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="/"><img src="built/images/logo.png" alt="JustMemes"/></a>
+                        <a onClick={this.navigate.bind(this,"")}><img src="built/images/logo.png" alt="JustMemes"/></a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>

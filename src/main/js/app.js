@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import MainPage from './components/MainPage'
 import WaitingRoom from './components/WaitingRoom'
 
+
 ReactDOM.render(
     <Router history={browserHistory}>
         <Route path="/" component={Layout}>

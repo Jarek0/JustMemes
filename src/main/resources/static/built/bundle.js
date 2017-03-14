@@ -26580,6 +26580,8 @@
 	
 	var _reactBootstrap = __webpack_require__(235);
 	
+	var _reactRouter = __webpack_require__(178);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26598,6 +26600,21 @@
 	    }
 	
 	    _createClass(Layout, [{
+	        key: 'getPathAfterReload',
+	        value: function getPathAfterReload() {
+	            $.ajax({
+	                url: '/getPathAfterReload',
+	                type: 'GET',
+	                success: function (data) {
+	                    console.log(data.content);
+	                    _reactRouter.browserHistory.push(data.content);
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    console.log(xhr.status + ":" + xhr.responseText);
+	                }.bind(this)
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -26686,7 +26703,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: '/' },
+	                            { onClick: this.navigate.bind(this, "") },
 	                            _react2.default.createElement('img', { src: 'built/images/logo.png', alt: 'JustMemes' })
 	                        )
 	                    ),
@@ -46193,7 +46210,13 @@
 	    _createClass(MainPage, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            this.showInitialPage(0);
+	            console.log("mainPage");
+	            if (this.props.params.page === undefined) {
+	                this.showMemesFromPage(1);
+	                return;
+	            }
+	
+	            this.showMemesFromPage(this.props.params.page);
 	        }
 	    }, {
 	        key: 'showMemesFromPage',
@@ -46214,23 +46237,6 @@
 	            window.scrollTo(0, 0);
 	        }
 	    }, {
-	        key: 'showInitialPage',
-	        value: function showInitialPage(page) {
-	            console.log("Welcome on main page!");
-	            $.ajax({
-	                url: '/mem/initialPage',
-	                type: 'GET',
-	                success: function (data) {
-	                    this.setState({ numberOfPage: page });
-	                    this.setState({ memes: data.content });
-	                }.bind(this),
-	                error: function (xhr, ajaxOptions, thrownError) {
-	                    this.setState({ errorStatus: xhr.status });
-	                    this.setState({ errorMessage: xhr.responseText });
-	                }.bind(this)
-	            });
-	        }
-	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
 	            if (nextProps.params.page !== this.props.params.page || nextProps.params.page !== undefined) {
@@ -46248,7 +46254,7 @@
 	                    this.state.memes.map(function (mem) {
 	                        return _react2.default.createElement(_Mem2.default, { title: mem.title, key: 'mem-' + mem.id, id: mem.id, fileType: mem.fileType });
 	                    }),
-	                    _react2.default.createElement(_DownPanel2.default, { page: 'main_page', numberOfPage: this.state.numberOfPage })
+	                    _react2.default.createElement(_DownPanel2.default, { page: '/', numberOfPage: this.state.numberOfPage })
 	                );
 	            } else {
 	                return _react2.default.createElement(
@@ -46478,12 +46484,12 @@
 	    _createClass(DownPanel, [{
 	        key: 'nextPage',
 	        value: function nextPage() {
-	            _reactRouter.browserHistory.push("/" + (Number(this.props.numberOfPage) + 1));
+	            _reactRouter.browserHistory.push(this.props.page + (Number(this.props.numberOfPage) + 1));
 	        }
 	    }, {
 	        key: 'changePage',
 	        value: function changePage(e) {
-	            _reactRouter.browserHistory.push("/" + Number(this.state.writtenNumberOfPage));
+	            _reactRouter.browserHistory.push(this.props.page + Number(this.state.writtenNumberOfPage));
 	        }
 	    }, {
 	        key: 'writeNumberOfPage',
@@ -46589,7 +46595,7 @@
 	        key: "getPagesCount",
 	        value: function getPagesCount() {
 	            $.ajax({
-	                url: this.props.page == "main_page" ? '/mem/getPagesCount' : '/mem/waiting/getPagesCount',
+	                url: this.props.page == "/" ? '/mem/getPagesCount' : '/mem/waiting/getPagesCount',
 	                type: 'GET'
 	            }).then(function (data) {
 	                this.setState({ countOfPages: data });
@@ -46607,7 +46613,7 @@
 	            for (var i = 1; i < this.state.countOfPages + 1; i++) {
 	                pagesNumbers.push(_react2.default.createElement(
 	                    _reactRouter.Link,
-	                    { className: this.isActive(i), key: 'pageNumber-' + i, to: this.props.page == "main_page" ? '/' + i : '/waiting/' + i },
+	                    { className: this.isActive(i), key: 'pageNumber-' + i, to: this.props.page + i },
 	                    i
 	                ));
 	            }
@@ -46678,7 +46684,13 @@
 	    _createClass(WaitingRoom, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            this.showInitialPage(0);
+	            console.log("waitingRoom");
+	            if (this.props.params.page === undefined) {
+	                this.showMemesFromPage(1);
+	                return;
+	            }
+	
+	            this.showMemesFromPage(this.props.params.page);
 	        }
 	    }, {
 	        key: 'showMemesFromPage',
@@ -46699,23 +46711,6 @@
 	            window.scrollTo(0, 0);
 	        }
 	    }, {
-	        key: 'showInitialPage',
-	        value: function showInitialPage(page) {
-	            console.log("Welcome on waiting page!");
-	            $.ajax({
-	                url: '/mem/waiting/initialPage',
-	                type: 'GET',
-	                success: function (data) {
-	                    this.setState({ numberOfPage: page });
-	                    this.setState({ memes: data.content });
-	                }.bind(this),
-	                error: function (xhr, ajaxOptions, thrownError) {
-	                    this.setState({ errorStatus: xhr.status });
-	                    this.setState({ errorMessage: xhr.responseText });
-	                }.bind(this)
-	            });
-	        }
-	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
 	            if (nextProps.params.page !== this.props.params.page || nextProps.params.page !== undefined) {
@@ -46733,7 +46728,7 @@
 	                    this.state.memes.map(function (mem) {
 	                        return _react2.default.createElement(_Mem2.default, { title: mem.title, key: 'mem-' + mem.id, id: mem.id, fileType: mem.fileType });
 	                    }),
-	                    _react2.default.createElement(_DownPanel2.default, { page: 'waiting_room', numberOfPage: this.state.numberOfPage })
+	                    _react2.default.createElement(_DownPanel2.default, { page: '/waiting/', numberOfPage: this.state.numberOfPage })
 	                );
 	            } else {
 	                return _react2.default.createElement(

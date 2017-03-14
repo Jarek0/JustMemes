@@ -46,7 +46,7 @@ public class Mem {
         this.title=title;
         this.fileType=contentType.substring(contentType.lastIndexOf("/") + 1);
         this.createdDate=createdDate;
-        this.status=Status.MAIN_PAGE;
+        this.status=Status.ACCEPTED;
     }
 
     public long getId() {

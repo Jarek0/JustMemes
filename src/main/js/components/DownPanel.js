@@ -10,11 +10,11 @@ export default class DownPanel extends React.Component{
     }
 
     nextPage() {
-        browserHistory.push("/"+(Number(this.props.numberOfPage)+1));
+        browserHistory.push(this.props.page+(Number(this.props.numberOfPage)+1));
     }
 
     changePage(e){
-        browserHistory.push("/"+(Number(this.state.writtenNumberOfPage)));
+        browserHistory.push(this.props.page+(Number(this.state.writtenNumberOfPage)));
     }
 
     writeNumberOfPage(e){
