@@ -1,4 +1,4 @@
-package edu.pl.pollub;
+package edu.pl.pollub.initializer;
 
 import edu.pl.pollub.repository.MemRepository;
 import edu.pl.pollub.service.FileService;
@@ -14,13 +14,13 @@ import javax.inject.Inject;
  * Created by Dell on 2017-02-27.
  */
 @Component
-public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
+public class DataInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
     private final FileService storageService;
     private final MemRepository repository;
 
     @Inject
-    Initializer(final FileService storageService,final MemRepository repository){
+    DataInitializer(final FileService storageService, final MemRepository repository){
         this.repository=repository;
         this.storageService=storageService;
     }

@@ -25,28 +25,26 @@ public class Mem {
     @NotNull @Size(min=3,max=4) @Pattern(regexp = "^(gif|jpeg|png|mp4)",message="invalid file type")
     private String fileType;
 
+    @NotNull
     private Timestamp createdDate;
 
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
 
-    @Enumerated(EnumType.STRING)
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
+    @ManyToOne
+    private User user;
 
     public Mem(){
 
     }
 
-    public Mem(String title,String contentType,Timestamp createdDate){
+    public Mem(String title,String contentType,Timestamp createdDate,User user){
         this.title=title;
         this.fileType=contentType.substring(contentType.lastIndexOf("/") + 1);
         this.createdDate=createdDate;
         this.status=Status.ACCEPTED;
+        this.user=user;
     }
 
     public long getId() {
@@ -81,5 +79,19 @@ public class Mem {
         this.createdDate = createdDate;
     }
 
+    public Status getStatus() {
+        return status;
+    }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

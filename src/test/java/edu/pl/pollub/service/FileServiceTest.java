@@ -1,6 +1,6 @@
 package edu.pl.pollub.service;
 
-import edu.pl.pollub.StorageProperties;
+import edu.pl.pollub.config.StorageProperties;
 import edu.pl.pollub.service.implementation.FileServiceImpl;
 import org.junit.After;
 import org.junit.Before;

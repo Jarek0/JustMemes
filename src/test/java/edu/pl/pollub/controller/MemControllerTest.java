@@ -51,7 +51,7 @@ public class MemControllerTest {
 
     @Test
     public void addMemSuccessfully() throws Exception {
-        when(memServiceMock.addMem(eq(mockfile),eq("myFile"))).thenReturn(new Mem("myFile","txt",new Timestamp(System.currentTimeMillis())));
+        when(memServiceMock.addMem(eq(mockfile),eq("myFile"))).thenReturn(new Mem("myFile","txt",new Timestamp(System.currentTimeMillis()),null));
 
 
         mockMvc.perform(MockMvcRequestBuilders.fileUpload("/mem")

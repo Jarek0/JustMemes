@@ -2,7 +2,7 @@ package edu.pl.pollub.service.implementation;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.entity.enums.Status;
-import edu.pl.pollub.exception.ObjectNotFound;
+import edu.pl.pollub.exception.ObjectNotFoundException;
 import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.repository.MemRepository;
 import edu.pl.pollub.service.FileService;
@@ -49,7 +49,7 @@ public class MemServiceImpl implements MemService{
     @Override
     @Transactional
     public Mem addMem(@Valid @NotNull @NotBlank MultipartFile file, @Valid @NotNull @Size(min = 2, max = 35)  String memTitle){
-        Mem mem=new Mem(memTitle,file.getContentType(),new Timestamp(System.currentTimeMillis()));
+        Mem mem=new Mem(memTitle,file.getContentType(),new Timestamp(System.currentTimeMillis()),null);
         mem=memRepository.save(mem);
         fileService.store(file,String.valueOf(mem.getId()),mem.getFileType());
         return mem;
@@ -57,10 +57,10 @@ public class MemServiceImpl implements MemService{
 
     @Override
     @Transactional
-    public Mem findMem(@NotNull @Valid long id) throws ObjectNotFound {
+    public Mem findMem(@NotNull @Valid long id) throws ObjectNotFoundException {
         Mem mem= memRepository.findOne(id);
         if (mem == null)
-            throw new ObjectNotFound(id);
+            throw new ObjectNotFoundException(id);
         return mem;
     }
 

@@ -1,4 +1,4 @@
-package edu.pl.pollub;
+package edu.pl.pollub.config;
 
 /**
  * Created by Dell on 2017-02-11.

@@ -42,7 +42,7 @@ public class MemRepositoryTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         for(int i=0;i<17;i++){
-            entityManager.persist(new Mem("test"+i,"image/jpeg", new Timestamp(i)));
+            entityManager.persist(new Mem("test"+i,"image/jpeg", new Timestamp(i),null));
             System.out.println(i);
         }
 
@@ -65,7 +65,7 @@ public class MemRepositoryTest {
 
     @Test
     public void addMemeWithNullNameTest(){
-        Mem mem=memRepository.save(new Mem(null,"image/jpeg",new Timestamp(1)));
+        Mem mem=memRepository.save(new Mem(null,"image/jpeg",new Timestamp(1),null));
         Set<ConstraintViolation<Mem>> constraintViolations =
                 validator.validate( mem );
 
@@ -79,7 +79,7 @@ public class MemRepositoryTest {
 
     @Test
     public void addMemWithInvalidTitleTest(){
-        Mem mem=memRepository.save(new Mem("a","image/jpeg",new Timestamp(1)));
+        Mem mem=memRepository.save(new Mem("a","image/jpeg",new Timestamp(1),null));
         Set<ConstraintViolation<Mem>> constraintViolations =
                 validator.validate( mem );
 
@@ -92,7 +92,7 @@ public class MemRepositoryTest {
 
     @Test
     public void addMemWithInvalidFileTypeTest(){
-        Mem mem=memRepository.save(new Mem("testMem","image/jpegz",new Timestamp(1)));
+        Mem mem=memRepository.save(new Mem("testMem","image/jpegz",new Timestamp(1),null));
         Set<ConstraintViolation<Mem>> constraintViolations =
                 validator.validate( mem );
         ArrayList<ConstraintViolation<Mem>> constraintViolationsList=new ArrayList<>();

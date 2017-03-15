@@ -1,6 +1,6 @@
 package edu.pl.pollub.service.implementation;
 
-import edu.pl.pollub.StorageProperties;
+import edu.pl.pollub.config.StorageProperties;
 import edu.pl.pollub.exception.StorageException;
 import edu.pl.pollub.exception.StorageFileNotFoundException;
 import edu.pl.pollub.service.FileService;

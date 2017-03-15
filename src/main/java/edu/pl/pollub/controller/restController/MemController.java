@@ -2,10 +2,9 @@ package edu.pl.pollub.controller.restController;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.entity.enums.Status;
-import edu.pl.pollub.exception.ObjectNotFound;
+import edu.pl.pollub.exception.ObjectNotFoundException;
 import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.service.MemService;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -15,11 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * Created by Dell on 2017-01-26.
@@ -48,7 +42,7 @@ public class MemController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Mem showMem(@PathVariable long id) throws ObjectNotFound {
+    public Mem showMem(@PathVariable long id) throws ObjectNotFoundException {
         return memService.findMem(id);
     }
 

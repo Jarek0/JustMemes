@@ -5,6 +5,6 @@ package edu.pl.pollub.exception;
  */
 public class PageNotExistException extends Exception {
     public PageNotExistException(int pageNumber) {
-        super("Sorry, but page with number "+pageNumber+" not exist");
+        super("Sorry, but page with number "+pageNumber+" does not exist");
     }
 }

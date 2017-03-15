@@ -22,8 +22,15 @@ public class MainController {
 
     @RequestMapping(method = RequestMethod.GET,value = "/waiting/{pageNumber}")
     public ModelAndView reloadWaitingPage(@PathVariable int pageNumber, HttpServletRequest request) {
-        System.out.print(pageNumber);
         request.getSession().setAttribute("path","/waiting/"+pageNumber);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("index");
+        return mav;
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/showMem/{id}")
+    public ModelAndView reloadShowMemPage(@PathVariable int id, HttpServletRequest request) {
+        request.getSession().setAttribute("path","/showMem/"+id);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
         return mav;
