@@ -39,6 +39,7 @@ export default class MainPage extends React.Component{
         window.scrollTo(0,0);
     }
 
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.params.page !== this.props.params.page || nextProps.params.page !== undefined) {
             this.props.params.page=nextProps.params.page;

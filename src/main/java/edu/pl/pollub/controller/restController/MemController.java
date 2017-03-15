@@ -2,6 +2,7 @@ package edu.pl.pollub.controller.restController;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.entity.enums.Status;
+import edu.pl.pollub.exception.ObjectNotFound;
 import edu.pl.pollub.exception.PageNotExistException;
 import edu.pl.pollub.service.MemService;
 import org.hibernate.validator.constraints.NotBlank;
@@ -42,13 +43,13 @@ public class MemController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public Mem addMem(@RequestPart("file") @Valid @NotNull @NotBlank MultipartFile file,@RequestParam("memTitle") @Valid @NotNull @Size(min = 2, max = 35) String memTitle) {
+    public Mem addMem(@RequestPart("file") MultipartFile file,@RequestParam("memTitle") String memTitle) {
         return memService.addMem(file,memTitle);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Mem> findAllMemes(){
-        return memService.findAllMemes();
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Mem showMem(@PathVariable long id) throws ObjectNotFound {
+        return memService.findMem(id);
     }
 
     //Additional methods

@@ -2,6 +2,7 @@ package edu.pl.pollub.service;
 
 import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.entity.enums.Status;
+import edu.pl.pollub.exception.ObjectNotFound;
 import edu.pl.pollub.exception.PageNotExistException;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,8 @@ public interface MemService {
     Page<Mem> showMemesFromPage(int pageNumber,Status status) throws PageNotExistException;
 
     Mem addMem(MultipartFile file, String memTitle);
+
+    Mem findMem(long id) throws ObjectNotFound;
 
     Resource getFileForMem(String fileName);
 

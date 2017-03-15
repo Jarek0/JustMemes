@@ -31,10 +31,19 @@ public class ExceptionHandlingController {
         return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<String> handleException(RuntimeException ex, HttpServletResponse response) throws IOException
+    {
+        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<String> handleException(Exception ex, HttpServletResponse response) throws IOException
     {
-        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }

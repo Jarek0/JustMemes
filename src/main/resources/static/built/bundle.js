@@ -64,7 +64,11 @@
 	
 	var _MainPage2 = _interopRequireDefault(_MainPage);
 	
-	var _WaitingRoom = __webpack_require__(506);
+	var _ShowMemPage = __webpack_require__(506);
+	
+	var _ShowMemPage2 = _interopRequireDefault(_ShowMemPage);
+	
+	var _WaitingRoom = __webpack_require__(507);
 	
 	var _WaitingRoom2 = _interopRequireDefault(_WaitingRoom);
 	
@@ -79,6 +83,7 @@
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _MainPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting', name: 'waiting_room', component: _WaitingRoom2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting/(:page)', name: 'waiting_room', component: _WaitingRoom2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'showMem/(:id)', name: 'show_mem', component: _ShowMemPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '(:page)', name: 'main_page', component: _MainPage2.default })
 	    )
 	), document.getElementById('layout'));
@@ -26704,7 +26709,7 @@
 	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: this.navigate.bind(this, "") },
-	                            _react2.default.createElement('img', { src: 'built/images/logo.png', alt: 'JustMemes' })
+	                            _react2.default.createElement('img', { src: '/built/images/logo.png', alt: 'JustMemes' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
@@ -26717,17 +26722,17 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavItem,
-	                            { onClick: this.navigate.bind(this, "waiting") },
+	                            { onClick: this.navigate.bind(this, "/waiting") },
 	                            'Waiting room'
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavItem,
-	                            { onClick: this.navigate.bind(this, "top") },
+	                            { onClick: this.navigate.bind(this, "/top") },
 	                            'Top'
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.NavItem,
-	                            { onClick: this.navigate.bind(this, "random") },
+	                            { onClick: this.navigate.bind(this, "/random") },
 	                            'Random'
 	                        )
 	                    ),
@@ -46289,6 +46294,8 @@
 	
 	var _reactBootstrap = __webpack_require__(235);
 	
+	var _reactRouter = __webpack_require__(178);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46322,7 +46329,11 @@
 	                        this.props.title
 	                    ),
 	                    _react2.default.createElement('hr', null),
-	                    _react2.default.createElement(_reactBootstrap.Image, { className: 'img-responsive center-block', src: "http://localhost:8081/mem/getFile/" + this.props.id + "/" + this.props.fileType }),
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { className: "mem-" + this.props.id, key: 'mem-' + this.props.id, to: "/showMem/" + this.props.id },
+	                        _react2.default.createElement(_reactBootstrap.Image, { className: 'img-responsive center-block', src: "http://localhost:8081/mem/getFile/" + this.props.id + "/" + this.props.fileType })
+	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'buttonTollbar' },
@@ -46633,6 +46644,119 @@
 
 /***/ },
 /* 506 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(178);
+	
+	var _Mem = __webpack_require__(502);
+	
+	var _Mem2 = _interopRequireDefault(_Mem);
+	
+	var _Error = __webpack_require__(503);
+	
+	var _Error2 = _interopRequireDefault(_Error);
+	
+	var _DownPanel = __webpack_require__(504);
+	
+	var _DownPanel2 = _interopRequireDefault(_DownPanel);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ScroolMenu = function (_React$Component) {
+	    _inherits(ScroolMenu, _React$Component);
+	
+	    function ScroolMenu(props) {
+	        _classCallCheck(this, ScroolMenu);
+	
+	        var _this = _possibleConstructorReturn(this, (ScroolMenu.__proto__ || Object.getPrototypeOf(ScroolMenu)).call(this, props));
+	
+	        _this.state = { mem: [], id: 0, errorStatus: "", errorMessage: "" };
+	        return _this;
+	    }
+	
+	    _createClass(ScroolMenu, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            console.log("showOneMemPage");
+	            if (this.props.params.id === undefined) {
+	                this.showMem(1);
+	                return;
+	            }
+	
+	            this.showMem(this.props.params.id);
+	        }
+	    }, {
+	        key: 'showMem',
+	        value: function showMem(id) {
+	            $.ajax({
+	                url: '/mem/' + id,
+	                type: 'GET',
+	                success: function (data) {
+	                    console.log(data);
+	                    this.setState({ id: id });
+	                    this.setState({ mem: data });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    this.setState({ errorStatus: xhr.status });
+	                    this.setState({ errorMessage: xhr.responseText });
+	                }.bind(this)
+	            });
+	
+	            window.scrollTo(0, 0);
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (nextProps.params.id !== this.props.params.id || nextProps.params.id !== undefined) {
+	                this.props.params.id = nextProps.params.id;
+	                this.showMemesFromPage(this.props.params.id);
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            if (this.state.errorMessage.length === 0 && this.state.errorStatus.length === 0) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(_Mem2.default, { title: this.state.mem.title, key: 'mem-' + this.state.mem.id, id: this.state.mem.id, fileType: this.state.mem.fileType }),
+	                    _react2.default.createElement(_DownPanel2.default, { page: '/', numberOfPage: 0 })
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(_Error2.default, { status: this.state.errorStatus, mess: this.state.errorMessage })
+	                );
+	            }
+	        }
+	    }]);
+	
+	    return ScroolMenu;
+	}(_react2.default.Component);
+	
+	exports.default = ScroolMenu;
+
+/***/ },
+/* 507 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

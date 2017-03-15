@@ -14,15 +14,15 @@ export default class Navigator extends React.Component{
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a onClick={this.navigate.bind(this,"")}><img src="built/images/logo.png" alt="JustMemes"/></a>
+                        <a onClick={this.navigate.bind(this,"")}><img src="/built/images/logo.png" alt="JustMemes"/></a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav>
-                        <NavItem onClick={this.navigate.bind(this,"waiting")}>Waiting room</NavItem>
-                        <NavItem onClick={this.navigate.bind(this,"top")}>Top</NavItem>
-                        <NavItem onClick={this.navigate.bind(this,"random")}>Random</NavItem>
+                        <NavItem onClick={this.navigate.bind(this,"/waiting")}>Waiting room</NavItem>
+                        <NavItem onClick={this.navigate.bind(this,"/top")}>Top</NavItem>
+                        <NavItem onClick={this.navigate.bind(this,"/random")}>Random</NavItem>
                     </Nav>
                     <Nav pullRight>
                         <NavDropdown eventKey={3} id="dropdown" noCaret
