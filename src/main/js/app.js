@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import MainPage from './components/MainPage'
 import ShowMemPage from './components/ShowMemPage'
 import WaitingRoom from './components/WaitingRoom'
+import Auth from './components/Auth'
 
 
 ReactDOM.render(
@@ -15,6 +16,9 @@ ReactDOM.render(
             <Route path="waiting" name="waiting_room" component={WaitingRoom}></Route>
             <Route path="waiting/(:page)" name="waiting_room" component={WaitingRoom}></Route>
             <Route path="showMem/(:id)" name="show_mem" component={ShowMemPage}></Route>
+            <Route path="login" name="login" component={Auth}></Route>
+            <Route path="register" name="register" component={Auth}></Route>
+            <Route path="register" name="login" component={Auth}></Route>
             <Route path="(:page)" name="main_page" component={MainPage}></Route>
 
         </Route>

@@ -208,3 +208,67 @@ color: #747474;
     text-decoration: none;
     font-family: MyFont1;
 }
+.authPanel{
+    margin-top: 60px;
+}
+
+.authPanel li{
+    background: #333333;
+    border-color: #333333;
+}
+.authPanel .nav-tabs>li.active>a{
+    background: #545454;
+    border-color: #545454;
+    color: white;
+}
+.nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover{
+    border-color: #545454;
+}
+.nav-tabs.nav-justified>li>a{
+    border:none;
+}
+.authPanel .nav-tabs>li:hover>a{
+    background: #747474;
+    border-color: #747474;
+    color: white;
+}
+.authPanel .form-control{
+    background-color: #333333;
+    border-color: #333333;
+    color:#747474;
+}
+.authPanel input:-webkit-autofill {
+    background-color: #333333 !important;
+    border-color: #333333 !important;
+    color:#747474 !important;
+}
+
+.authPanel input#email::-webkit-input-placeholder {color:#545454;}
+.authPanel input#email::-moz-placeholder          {color:#545454;}
+.authPanel input#email:-moz-placeholder           {color:#545454;}
+.authPanel input#email:-ms-input-placeholder      {color:#545454;}
+.authPanel input#username::-webkit-input-placeholder {color:#545454;}
+.authPanel input#username::-moz-placeholder          {color:#545454;}
+.authPanel input#username:-moz-placeholder           {color:#545454;}
+.authPanel input#username:-ms-input-placeholder      {color:#545454;}
+
+.authPanel a{
+    color:white;
+}
+.authPanel .control-label{
+    color: #b5b5b5;
+}
+
+.authPanel .panel-body{
+    background: #545454;
+}
+
+.authPanel .panel-default{
+    border-color: #545454;
+    border-radius: 0;
+}
+
+.authPanel .btn-block{
+    background: #fffd00;
+    color:black;
+}

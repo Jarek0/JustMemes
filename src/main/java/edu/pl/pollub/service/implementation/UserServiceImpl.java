@@ -1,6 +1,7 @@
 package edu.pl.pollub.service.implementation;
 
 import edu.pl.pollub.entity.User;
+import edu.pl.pollub.entity.VerificationToken;
 import edu.pl.pollub.exception.ObjectNotFoundException;
 import edu.pl.pollub.exception.TableIsEmptyException;
 import edu.pl.pollub.repository.RoleRepository;
@@ -120,5 +121,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public void createVerificationToken(User user, String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
     }
 }

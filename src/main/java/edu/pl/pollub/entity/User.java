@@ -1,5 +1,7 @@
 package edu.pl.pollub.entity;
 
+import edu.pl.pollub.entity.request.UserRegisterRequest;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,18 +18,22 @@ public class User {
 
     }
 
+    public User(UserRegisterRequest userRegisterRequest){
+        this.username=userRegisterRequest.getUsername();
+        this.password=userRegisterRequest.getPassword();
+        this.email=userRegisterRequest.getEmail();
+    }
+
     public User(String username, String password, String passwordConfirm, String email) {
         this.username = username;
         this.password = password;
-        this.passwordConfirm = passwordConfirm;
         this.email = email;
 
     }
 
-    public User(String username, String password, String passwordConfirm, String email, boolean enabled, boolean online, boolean banned, VerificationToken token, Role role) {
+    public User(String username, String password, String email, boolean enabled, boolean online, boolean banned, VerificationToken token, Role role) {
         this.username = username;
         this.password = password;
-        this.passwordConfirm = passwordConfirm;
         this.email = email;
         this.enabled = enabled;
         this.online = online;
@@ -63,9 +69,6 @@ public class User {
 
     @NotNull
     private boolean banned;
-
-    @Transient
-    private String passwordConfirm;
 
     @OneToOne(mappedBy = "user")
     private VerificationToken token;
@@ -130,14 +133,6 @@ public class User {
 
     public void setBanned(boolean banned) {
         this.banned = banned;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
     }
 
     public VerificationToken getToken() {

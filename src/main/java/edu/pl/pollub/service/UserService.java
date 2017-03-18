@@ -30,4 +30,6 @@ public interface UserService {
     User update(User user);
 
     boolean emailExist(String email);
+
+    void createVerificationToken(User user, String token);
 }

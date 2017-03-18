@@ -1,6 +1,7 @@
 package edu.pl.pollub.validator;
 
 import edu.pl.pollub.entity.User;
+import edu.pl.pollub.entity.request.UserRegisterRequest;
 import edu.pl.pollub.service.UserService;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        User user = (User) o;
+        UserRegisterRequest user = (UserRegisterRequest) o;
         Locale locale = new Locale("");
         if (userService.emailExist(user.getEmail())) {
             errors.rejectValue("email", "Email.exist", "There is account with this e-mail. Please login to this account instead register new one.");
@@ -69,7 +70,6 @@ public class UserValidator implements Validator {
         if (!(matcher.matches())) {
             errors.rejectValue("email", "BadForm.userForm.email", "Email don't have appropriate form.");
         }
-
 
     }
 }
