@@ -237,20 +237,11 @@ color: #747474;
     border-color: #333333;
     color:#747474;
 }
-.authPanel input:-webkit-autofill {
-    background-color: #333333 !important;
-    border-color: #333333 !important;
-    color:#747474 !important;
-}
 
-.authPanel input#email::-webkit-input-placeholder {color:#545454;}
-.authPanel input#email::-moz-placeholder          {color:#545454;}
-.authPanel input#email:-moz-placeholder           {color:#545454;}
-.authPanel input#email:-ms-input-placeholder      {color:#545454;}
-.authPanel input#username::-webkit-input-placeholder {color:#545454;}
-.authPanel input#username::-moz-placeholder          {color:#545454;}
-.authPanel input#username:-moz-placeholder           {color:#545454;}
-.authPanel input#username:-ms-input-placeholder      {color:#545454;}
+.authPanel input::-webkit-input-placeholder {color:#545454;}
+.authPanel input::-moz-placeholder          {color:#545454;}
+.authPanel input:-moz-placeholder           {color:#545454;}
+.authPanel input:-ms-input-placeholder      {color:#545454;}
 
 .authPanel a{
     color:white;
@@ -271,4 +262,13 @@ color: #747474;
 .authPanel .btn-block{
     background: #fffd00;
     color:black;
+}
+
+.authPanel input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #333333 inset;
+    -webkit-text-fill-color: #747474 !important;
+}
+
+.authPanel .tooltip.top {
+    margin-top: 90px;
 }

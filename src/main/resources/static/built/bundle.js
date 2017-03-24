@@ -46882,6 +46882,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactDom = __webpack_require__(32);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
 	var _reactBootstrap = __webpack_require__(235);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -46898,35 +46902,63 @@
 	    function LoginForm(props) {
 	        _classCallCheck(this, LoginForm);
 	
-	        return _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
+	
+	        _this.state = { usernameError: { message: "", exist: false },
+	            passwordError: { message: "", exist: false },
+	            passwordConfirmError: { message: "", exist: false },
+	            emailError: { message: "", exist: false } };
+	        return _this;
 	    }
 	
 	    _createClass(LoginForm, [{
 	        key: 'register',
 	        value: function register() {
-	            var registerUser = {
-	                username: this.refs.username,
-	                password: this.refs.password,
-	                passwordConfirm: this.refs.passwordConfirm,
-	                email: this.refs.email
-	            };
-	            console.log(registerUser);
 	            $.ajax({
 	                url: '/registration',
 	                type: 'POST',
+	                contentType: "application/json",
 	                dataType: 'json',
 	                success: function (data) {
 	                    console.log(data);
 	                }.bind(this),
 	                error: function (xhr, ajaxOptions, thrownError) {
-	                    console.log(xhr);
+	                    var errors = JSON.parse(xhr.responseText);
+	                    this.setState({ usernameError: this.mapping("username", errors.fieldErrors) });
+	                    this.setState({ passwordError: this.mapping("password", errors.fieldErrors) });
+	                    this.setState({ passwordConfirmError: this.mapping("passwordConfirm", errors.fieldErrors) });
+	                    this.setState({ emailError: this.mapping("email", errors.fieldErrors) });
 	                }.bind(this),
-	                data: registerUser
+	                data: JSON.stringify({
+	                    "username": this.username.value,
+	                    "password": this.password.value,
+	                    "passwordConfirm": this.passwordConfirm.value,
+	                    "email": this.email.value
+	                })
 	            });
+	        }
+	    }, {
+	        key: 'mapping',
+	        value: function mapping(fieldName, table) {
+	            var i;
+	            for (i = 0; i < table.length; i++) {
+	                if (table[i].field == fieldName) {
+	                    return {
+	                        message: table[i].message,
+	                        exist: true
+	                    };
+	                }
+	            }
+	            return {
+	                message: "",
+	                exist: false
+	            };
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+	
 	            return _react2.default.createElement(
 	                _reactBootstrap.Form,
 	                null,
@@ -46942,35 +46974,22 @@
 	                            'User name:'
 	                        )
 	                    ),
-	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', id: 'username', placeholder: 'Jarek512' })
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.FormGroup,
-	                    { bsSize: 'large' },
+	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', id: 'username', inputRef: function inputRef(ref) {
+	                            _this2.username = ref;
+	                        }, placeholder: 'Jarek512' }),
 	                    _react2.default.createElement(
-	                        'h4',
-	                        null,
+	                        _reactBootstrap.Overlay,
+	                        { onHide: function onHide() {
+	                                return _this2.setState({ usernameError: { message: "", exist: false } });
+	                            }, rootClose: true, show: this.state.usernameError.exist, target: function target() {
+	                                return _reactDom2.default.findDOMNode(_this2.username);
+	                            }, container: this, placement: 'top' },
 	                        _react2.default.createElement(
-	                            _reactBootstrap.ControlLabel,
-	                            null,
-	                            'Password:'
+	                            _reactBootstrap.Tooltip,
+	                            { id: 'usernameError' },
+	                            this.state.usernameError.message
 	                        )
-	                    ),
-	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', id: 'password' })
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.FormGroup,
-	                    { bsSize: 'large' },
-	                    _react2.default.createElement(
-	                        'h4',
-	                        null,
-	                        _react2.default.createElement(
-	                            _reactBootstrap.ControlLabel,
-	                            null,
-	                            'Confirm password:'
-	                        )
-	                    ),
-	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', id: 'passwordConfirm' })
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
@@ -46984,7 +47003,80 @@
 	                            'Email address:'
 	                        )
 	                    ),
-	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'email', id: 'email', placeholder: 'jarek512@gmail.com' })
+	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'email', id: 'email', placeholder: 'jarek512@gmail.com', inputRef: function inputRef(ref) {
+	                            _this2.email = ref;
+	                        } }),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Overlay,
+	                        { onHide: function onHide() {
+	                                return _this2.setState({ emailError: { message: "", exist: false } });
+	                            }, rootClose: true, show: this.state.emailError.exist, target: function target() {
+	                                return _reactDom2.default.findDOMNode(_this2.email);
+	                            }, container: this, placement: 'top' },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Tooltip,
+	                            { positionTop: 100, id: 'emailError' },
+	                            this.state.emailError.message
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.FormGroup,
+	                    { bsSize: 'large' },
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactBootstrap.ControlLabel,
+	                            null,
+	                            'Password:'
+	                        )
+	                    ),
+	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', id: 'password', inputRef: function inputRef(ref) {
+	                            _this2.password = ref;
+	                        } }),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Overlay,
+	                        { onHide: function onHide() {
+	                                return _this2.setState({ passwordError: { message: "", exist: false } });
+	                            }, rootClose: true, show: this.state.passwordError.exist, target: function target() {
+	                                return _reactDom2.default.findDOMNode(_this2.password);
+	                            }, container: this, placement: 'top' },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Tooltip,
+	                            { positionTop: 100, id: 'passwordError' },
+	                            this.state.passwordError.message
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.FormGroup,
+	                    { bsSize: 'large' },
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactBootstrap.ControlLabel,
+	                            null,
+	                            'Confirm password:'
+	                        )
+	                    ),
+	                    _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', id: 'passwordConfirm', inputRef: function inputRef(ref) {
+	                            _this2.passwordConfirm = ref;
+	                        } }),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Overlay,
+	                        { onHide: function onHide() {
+	                                return _this2.setState({ passwordConfirmError: { message: "", exist: false } });
+	                            }, rootClose: true, show: this.state.passwordConfirmError.exist, target: function target() {
+	                                return _reactDom2.default.findDOMNode(_this2.passwordConfirm);
+	                            }, container: this, placement: 'top' },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Tooltip,
+	                            { positionTop: 100, id: 'passwordConfirmError' },
+	                            this.state.passwordConfirmError.message
+	                        )
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Button,
