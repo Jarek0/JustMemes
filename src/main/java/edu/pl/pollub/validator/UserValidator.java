@@ -61,7 +61,7 @@ public class UserValidator implements Validator {
 
         System.out.println(user.getPasswordConfirm());
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
-            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm", "Confirmation of password does not match to password");
+            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm", "Confirmation of password does not match to password.");
         }
         Pattern pattern;
         Matcher matcher;

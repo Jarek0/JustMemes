@@ -13,6 +13,11 @@ export default class LoginForm extends React.Component {
 
 
     register(){
+        const username=this.username.value;
+        const password=this.password.value;
+        const passwordConfirm=this.passwordConfirm.value;
+        const email=this.email.value;
+        if(this.validate(username,password,passwordConfirm,email)){
         $.ajax({
             url: '/registration',
             type: 'POST',
@@ -29,12 +34,45 @@ export default class LoginForm extends React.Component {
                 this.setState({emailError: this.mapping("email",errors.fieldErrors)});
             }).bind(this),
             data:JSON.stringify({
-                "username":this.username.value,
-                "password":this.password.value,
-                "passwordConfirm":this.passwordConfirm.value,
-                "email":this.email.value
+                "username":username,
+                "password":password,
+                "passwordConfirm":passwordConfirm,
+                "email":email
             })
-        });
+        });}
+    }
+
+    validate(username,password,passwordConfirm,email){
+        var result=true;
+        if(username.length<6 || username.length>32){
+            result=false;
+            this.setState({usernameError: {
+                message:"Please use count of characters between 6 and 32.",
+                exist:true}
+            });
+        }
+
+        if(password.length<8 || password.length>32){
+            result=false;
+            this.setState({passwordError: {
+                message:"Password should have more than 8 characters.",
+                exist:true}});
+        }
+
+        if(password!==passwordConfirm){
+            result=false;
+            this.setState({passwordConfirmError: {
+                message:"Confirmation of password does not match to password.",
+                exist:true}});
+        }
+        if(!/^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/.test(email)){
+            result=false;
+            this.setState({emailError: {
+                message:"Email don't have appropriate form.",
+                exist:true}});
+        }
+
+        return result;
     }
 
     mapping(fieldName,table) {

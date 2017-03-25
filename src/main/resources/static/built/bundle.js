@@ -46914,28 +46914,68 @@
 	    _createClass(LoginForm, [{
 	        key: 'register',
 	        value: function register() {
-	            $.ajax({
-	                url: '/registration',
-	                type: 'POST',
-	                contentType: "application/json",
-	                dataType: 'json',
-	                success: function (data) {
-	                    console.log(data);
-	                }.bind(this),
-	                error: function (xhr, ajaxOptions, thrownError) {
-	                    var errors = JSON.parse(xhr.responseText);
-	                    this.setState({ usernameError: this.mapping("username", errors.fieldErrors) });
-	                    this.setState({ passwordError: this.mapping("password", errors.fieldErrors) });
-	                    this.setState({ passwordConfirmError: this.mapping("passwordConfirm", errors.fieldErrors) });
-	                    this.setState({ emailError: this.mapping("email", errors.fieldErrors) });
-	                }.bind(this),
-	                data: JSON.stringify({
-	                    "username": this.username.value,
-	                    "password": this.password.value,
-	                    "passwordConfirm": this.passwordConfirm.value,
-	                    "email": this.email.value
-	                })
-	            });
+	            var username = this.username.value;
+	            var password = this.password.value;
+	            var passwordConfirm = this.passwordConfirm.value;
+	            var email = this.email.value;
+	            if (this.validate(username, password, passwordConfirm, email)) {
+	                $.ajax({
+	                    url: '/registration',
+	                    type: 'POST',
+	                    contentType: "application/json",
+	                    dataType: 'json',
+	                    success: function (data) {
+	                        console.log(data);
+	                    }.bind(this),
+	                    error: function (xhr, ajaxOptions, thrownError) {
+	                        var errors = JSON.parse(xhr.responseText);
+	                        this.setState({ usernameError: this.mapping("username", errors.fieldErrors) });
+	                        this.setState({ passwordError: this.mapping("password", errors.fieldErrors) });
+	                        this.setState({ passwordConfirmError: this.mapping("passwordConfirm", errors.fieldErrors) });
+	                        this.setState({ emailError: this.mapping("email", errors.fieldErrors) });
+	                    }.bind(this),
+	                    data: JSON.stringify({
+	                        "username": username,
+	                        "password": password,
+	                        "passwordConfirm": passwordConfirm,
+	                        "email": email
+	                    })
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'validate',
+	        value: function validate(username, password, passwordConfirm, email) {
+	            var result = true;
+	            if (username.length < 6 || username.length > 32) {
+	                result = false;
+	                this.setState({ usernameError: {
+	                        message: "Please use count of characters between 6 and 32.",
+	                        exist: true }
+	                });
+	            }
+	
+	            if (password.length < 8 || password.length > 32) {
+	                result = false;
+	                this.setState({ passwordError: {
+	                        message: "Password should have more than 8 characters.",
+	                        exist: true } });
+	            }
+	
+	            if (password !== passwordConfirm) {
+	                result = false;
+	                this.setState({ passwordConfirmError: {
+	                        message: "Confirmation of password does not match to password.",
+	                        exist: true } });
+	            }
+	            if (!/^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/.test(email)) {
+	                result = false;
+	                this.setState({ emailError: {
+	                        message: "Email don't have appropriate form.",
+	                        exist: true } });
+	            }
+	
+	            return result;
 	        }
 	    }, {
 	        key: 'mapping',
