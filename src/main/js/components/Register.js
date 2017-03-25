@@ -9,7 +9,8 @@ export default class LoginForm extends React.Component {
             passwordError:{message:"", exist:false},
             passwordConfirmError:{message:"", exist:false},
             emailError:{message:"", exist:false},
-            registrationSuccessful:{id:0,exist:false}}
+            registrationSuccessful:{id:"",exist:false},
+            registrationButtonState:"Register"}
     }
 
 
@@ -19,13 +20,14 @@ export default class LoginForm extends React.Component {
         const passwordConfirm=this.passwordConfirm.value;
         const email=this.email.value;
         if(this.validate(username,password,passwordConfirm,email)){
+            this.setState({registrationButtonState:"Please wait..."});
         $.ajax({
             url: '/registration',
             type: 'POST',
             contentType: "application/json",
             dataType: 'json',
             success: (function(data) {
-                this.setState({registrationSuccessful:{id:data,exist:true}})
+                this.setState({registrationSuccessful:{id:data.message,exist:true}});
             }).bind(this),
             error: (function (xhr, ajaxOptions, thrownError) {
                 var errors=JSON.parse(xhr.responseText);
@@ -40,7 +42,8 @@ export default class LoginForm extends React.Component {
                 "passwordConfirm":passwordConfirm,
                 "email":email
             })
-        });}
+        });
+            this.setState({registrationButtonState:"Register"});}
     }
 
     validate(username,password,passwordConfirm,email){
@@ -94,14 +97,19 @@ export default class LoginForm extends React.Component {
 
     resend(){
         $.ajax({
-            url: '/resendToken/'+this.state.registrationSuccessful.id,
-            type: 'GET',
+            url: '/resendToken',
+            type: 'POST',
+            contentType: "application/json",
+            dataType: 'json',
             success: (function(data) {
-                this.setState({registrationSuccessful:{id:data,exist:true}})
+                this.setState({registrationSuccessful:{id:data.message,exist:true}})
             }).bind(this),
             error: (function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr);
             }).bind(this),
+            data:JSON.stringify({
+                "message":this.state.registrationSuccessful.id
+            })
         });
     }
 
@@ -138,7 +146,7 @@ export default class LoginForm extends React.Component {
                     </Overlay>
                 </FormGroup>
                 <Button bsStyle="primary" ref={(ref) => { this.registrationButton = ref; }} bsSize="large" onClick={this.register.bind(this)} block>
-                    Register
+                    {this.state.registrationButtonState}
                 </Button>
                 <Overlay
                     show={this.state.registrationSuccessful.exist}

@@ -88,6 +88,8 @@ public class VerificationToken {
         this.date = date;
     }
 
+    public void setDate(){this.date=calculateExpiryDate(EXPIRATION).getTime();}
+
     public boolean getVerified() {
         return verified;
     }

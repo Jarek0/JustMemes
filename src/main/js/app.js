@@ -18,7 +18,6 @@ ReactDOM.render(
             <Route path="showMem/(:id)" name="show_mem" component={ShowMemPage}></Route>
             <Route path="login" name="login" component={Auth}></Route>
             <Route path="register" name="register" component={Auth}></Route>
-            <Route path="register" name="login" component={Auth}></Route>
             <Route path="(:page)" name="main_page" component={MainPage}></Route>
 
         </Route>

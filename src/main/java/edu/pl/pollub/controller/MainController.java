@@ -13,32 +13,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class MainController {
-    @RequestMapping(method = RequestMethod.GET,value ={"/waiting","/"} )
-    public ModelAndView index() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
-        return mav;
-    }
 
-    @RequestMapping(method = RequestMethod.GET,value = "/waiting/{pageNumber}")
-    public ModelAndView reloadWaitingPage(@PathVariable int pageNumber, HttpServletRequest request) {
-        request.getSession().setAttribute("path","/waiting/"+pageNumber);
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
-        return mav;
-    }
-
-    @RequestMapping(method = RequestMethod.GET,value = "/showMem/{id}")
-    public ModelAndView reloadShowMemPage(@PathVariable int id, HttpServletRequest request) {
-        request.getSession().setAttribute("path","/showMem/"+id);
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
-        return mav;
-    }
-
-    @RequestMapping(method = RequestMethod.GET,value = "/{pageNumber}")
-    public ModelAndView reloadMainPage(@PathVariable int pageNumber,HttpServletRequest request) {
-        request.getSession().setAttribute("path","/"+pageNumber);
+    @RequestMapping(method = RequestMethod.GET,value = {"/waiting","/","/waiting/{pageNumber}","/showMem/{id}","/{pageNumber}","/login","/register"})
+    public ModelAndView reloadPage(HttpServletRequest request) {
+        request.getSession().setAttribute("path",request.getServletPath());
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
         return mav;

@@ -73,13 +73,12 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         return vtoken;
     }
 
-    @Override
-    public VerificationToken generateNewVerificationToken(String existingToken) {
-        return new VerificationToken(UUID.randomUUID().toString(), (verificationTokenRepository.findByToken(existingToken)).getUser());
-    }
 
     @Override
     public VerificationToken generateNewVerificationToken(User user) {
-        return new VerificationToken(UUID.randomUUID().toString(), user);
+        VerificationToken token=user.getToken();
+        token.setToken(UUID.randomUUID().toString());
+        token.setDate();
+        return token;
     }
 }

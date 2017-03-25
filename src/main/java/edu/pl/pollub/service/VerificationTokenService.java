@@ -21,8 +21,6 @@ public interface VerificationTokenService {
 
     VerificationToken getById(Long id) throws ObjectNotFoundException;
 
-    VerificationToken generateNewVerificationToken(String existingToken);
-
     VerificationToken generateNewVerificationToken(User user);
 
     VerificationToken getByToken(String token) throws ObjectNotFoundException;

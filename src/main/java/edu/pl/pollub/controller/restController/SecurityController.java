@@ -1,6 +1,7 @@
 package edu.pl.pollub.controller.restController;
 
 import com.sun.istack.internal.NotNull;
+import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.entity.User;
 import edu.pl.pollub.entity.VerificationToken;
 import edu.pl.pollub.entity.request.UserRegisterRequest;
@@ -8,6 +9,7 @@ import edu.pl.pollub.event.OnRegistrationCompleteEvent;
 import edu.pl.pollub.exception.AuthException;
 import edu.pl.pollub.exception.InvalidRequestException;
 import edu.pl.pollub.exception.ObjectNotFoundException;
+import edu.pl.pollub.response.GenericResponse;
 import edu.pl.pollub.service.MailService;
 import edu.pl.pollub.service.UserService;
 import edu.pl.pollub.service.VerificationTokenService;
@@ -54,21 +56,23 @@ public class SecurityController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public long registration(@RequestBody @Valid UserRegisterRequest userForm, HttpServletRequest request, BindingResult bindingResult) {
+    @ResponseStatus(HttpStatus.OK)
+    public GenericResponse registration(@RequestBody @Valid UserRegisterRequest userForm, HttpServletRequest request, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException("Invalid user", bindingResult);
         }
         User user=userService.registerNewUserAccount(new User(userForm));
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), request.getContextPath()));
-        return user.getId();
+        return new GenericResponse(user.getEmail());
     }
 
-    @RequestMapping(value = "/resendToken/{id}", method = RequestMethod.GET)
-    public long resendToken(@PathVariable long id, HttpServletRequest request) throws ObjectNotFoundException {
-        User user=userService.getById(id);
+    @RequestMapping(value = "/resendToken", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public GenericResponse resendToken(@RequestBody @Valid GenericResponse response, HttpServletRequest request) throws ObjectNotFoundException {
+        User user=userService.getByEmail(response.getMessage());
         VerificationToken newToken=verificationTokenService.generateNewVerificationToken(user);
-        verificationTokenService.save(newToken);
+        verificationTokenService.update(newToken);
         String recipientAddress = user.getEmail();
         String appUrl = request.getContextPath();
         String subject = "Registration Confirmation";
@@ -77,7 +81,7 @@ public class SecurityController {
         String message = "Please click this link to verify your account: ";
 
         mailService.sendMail("from@no-spam.com",recipientAddress,subject,message + "http://localhost:8081" + confirmationUrl);
-        return user.getId();
+        return new GenericResponse(user.getEmail());
     }
 
     @RequestMapping(value = "/registration/confirm", method = RequestMethod.GET)

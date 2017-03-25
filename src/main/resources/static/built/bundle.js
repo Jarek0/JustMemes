@@ -90,7 +90,6 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: 'showMem/(:id)', name: 'show_mem', component: _ShowMemPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', name: 'login', component: _Auth2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', name: 'register', component: _Auth2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'register', name: 'login', component: _Auth2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '(:page)', name: 'main_page', component: _MainPage2.default })
 	    )
 	), document.getElementById('layout'));
@@ -46908,7 +46907,8 @@
 	            passwordError: { message: "", exist: false },
 	            passwordConfirmError: { message: "", exist: false },
 	            emailError: { message: "", exist: false },
-	            registrationSuccessful: { id: 0, exist: false } };
+	            registrationSuccessful: { id: "", exist: false },
+	            registrationButtonState: "Register" };
 	        return _this;
 	    }
 	
@@ -46920,13 +46920,14 @@
 	            var passwordConfirm = this.passwordConfirm.value;
 	            var email = this.email.value;
 	            if (this.validate(username, password, passwordConfirm, email)) {
+	                this.setState({ registrationButtonState: "Please wait..." });
 	                $.ajax({
 	                    url: '/registration',
 	                    type: 'POST',
 	                    contentType: "application/json",
 	                    dataType: 'json',
 	                    success: function (data) {
-	                        this.setState({ registrationSuccessful: { id: data, exist: true } });
+	                        this.setState({ registrationSuccessful: { id: data.message, exist: true } });
 	                    }.bind(this),
 	                    error: function (xhr, ajaxOptions, thrownError) {
 	                        var errors = JSON.parse(xhr.responseText);
@@ -46942,6 +46943,7 @@
 	                        "email": email
 	                    })
 	                });
+	                this.setState({ registrationButtonState: "Register" });
 	            }
 	        }
 	    }, {
@@ -46999,14 +47001,19 @@
 	        key: 'resend',
 	        value: function resend() {
 	            $.ajax({
-	                url: '/resendToken/' + this.state.registrationSuccessful.id,
-	                type: 'GET',
+	                url: '/resendToken',
+	                type: 'POST',
+	                contentType: "application/json",
+	                dataType: 'json',
 	                success: function (data) {
-	                    this.setState({ registrationSuccessful: { id: data, exist: true } });
+	                    this.setState({ registrationSuccessful: { id: data.message, exist: true } });
 	                }.bind(this),
 	                error: function (xhr, ajaxOptions, thrownError) {
 	                    console.log(xhr);
-	                }.bind(this)
+	                }.bind(this),
+	                data: JSON.stringify({
+	                    "message": this.state.registrationSuccessful.id
+	                })
 	            });
 	        }
 	    }, {
@@ -47138,7 +47145,7 @@
 	                    { bsStyle: 'primary', ref: function ref(_ref) {
 	                            _this2.registrationButton = _ref;
 	                        }, bsSize: 'large', onClick: this.register.bind(this), block: true },
-	                    'Register'
+	                    this.state.registrationButtonState
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Overlay,
