@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveRegisteredUser(@NotNull final User user) {
+    public void saveRegisteredUser(@Valid  @NotNull final User user) {
 
         userRepository.save(user);
     }
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User registerNewUserAccount(User accountDto) {
+    public User registerNewUserAccount(@Valid @NotNull User accountDto) {
         accountDto.setPassword(bCryptPasswordEncoder.encode(accountDto.getPassword()));
         accountDto.setRole(roleRepository.findByName("USER"));
         accountDto.setEnabled(false);

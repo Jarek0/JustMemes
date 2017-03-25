@@ -8,7 +8,8 @@ export default class LoginForm extends React.Component {
         this.state = {usernameError:{message:"", exist:false},
             passwordError:{message:"", exist:false},
             passwordConfirmError:{message:"", exist:false},
-            emailError:{message:"", exist:false}}
+            emailError:{message:"", exist:false},
+            registrationSuccessful:{id:0,exist:false}}
     }
 
 
@@ -24,7 +25,7 @@ export default class LoginForm extends React.Component {
             contentType: "application/json",
             dataType: 'json',
             success: (function(data) {
-                console.log(data);
+                this.setState({registrationSuccessful:{id:data,exist:true}})
             }).bind(this),
             error: (function (xhr, ajaxOptions, thrownError) {
                 var errors=JSON.parse(xhr.responseText);
@@ -91,6 +92,19 @@ export default class LoginForm extends React.Component {
 
     }
 
+    resend(){
+        $.ajax({
+            url: '/resendToken/'+this.state.registrationSuccessful.id,
+            type: 'GET',
+            success: (function(data) {
+                this.setState({registrationSuccessful:{id:data,exist:true}})
+            }).bind(this),
+            error: (function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr);
+            }).bind(this),
+        });
+    }
+
     render(){
 
         return(
@@ -123,9 +137,27 @@ export default class LoginForm extends React.Component {
                         <Tooltip positionTop={100} id="passwordConfirmError">{this.state.passwordConfirmError.message}</Tooltip>
                     </Overlay>
                 </FormGroup>
-                <Button bsStyle="primary" bsSize="large" onClick={this.register.bind(this)} block>
+                <Button bsStyle="primary" ref={(ref) => { this.registrationButton = ref; }} bsSize="large" onClick={this.register.bind(this)} block>
                     Register
                 </Button>
+                <Overlay
+                    show={this.state.registrationSuccessful.exist}
+                    placement="bottom"
+                    container={this}
+                    target={() => ReactDOM.findDOMNode(this.refs.registrationButton)}
+                >
+                    <div style={{
+                        border: '1px solid #747474',
+                        borderRadius: 3,
+                        margin: 3,
+                        padding: 5
+                    }}>
+                    <h5><ControlLabel>Your registration is successful. Please check your e-mail. If you do not have verification email click this button:</ControlLabel></h5>
+                    <Button bsStyle="primary" ref="registrationButton" onClick={this.resend.bind(this)} block>
+                        Resend e-mail
+                    </Button>
+                    </div>
+                </Overlay>
             </Form>
         );
     }

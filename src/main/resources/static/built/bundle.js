@@ -46907,7 +46907,8 @@
 	        _this.state = { usernameError: { message: "", exist: false },
 	            passwordError: { message: "", exist: false },
 	            passwordConfirmError: { message: "", exist: false },
-	            emailError: { message: "", exist: false } };
+	            emailError: { message: "", exist: false },
+	            registrationSuccessful: { id: 0, exist: false } };
 	        return _this;
 	    }
 	
@@ -46925,7 +46926,7 @@
 	                    contentType: "application/json",
 	                    dataType: 'json',
 	                    success: function (data) {
-	                        console.log(data);
+	                        this.setState({ registrationSuccessful: { id: data, exist: true } });
 	                    }.bind(this),
 	                    error: function (xhr, ajaxOptions, thrownError) {
 	                        var errors = JSON.parse(xhr.responseText);
@@ -46993,6 +46994,20 @@
 	                message: "",
 	                exist: false
 	            };
+	        }
+	    }, {
+	        key: 'resend',
+	        value: function resend() {
+	            $.ajax({
+	                url: '/resendToken/' + this.state.registrationSuccessful.id,
+	                type: 'GET',
+	                success: function (data) {
+	                    this.setState({ registrationSuccessful: { id: data, exist: true } });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    console.log(xhr);
+	                }.bind(this)
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -47120,8 +47135,44 @@
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Button,
-	                    { bsStyle: 'primary', bsSize: 'large', onClick: this.register.bind(this), block: true },
+	                    { bsStyle: 'primary', ref: function ref(_ref) {
+	                            _this2.registrationButton = _ref;
+	                        }, bsSize: 'large', onClick: this.register.bind(this), block: true },
 	                    'Register'
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Overlay,
+	                    {
+	                        show: this.state.registrationSuccessful.exist,
+	                        placement: 'bottom',
+	                        container: this,
+	                        target: function target() {
+	                            return _reactDom2.default.findDOMNode(_this2.refs.registrationButton);
+	                        }
+	                    },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { style: {
+	                                border: '1px solid #747474',
+	                                borderRadius: 3,
+	                                margin: 3,
+	                                padding: 5
+	                            } },
+	                        _react2.default.createElement(
+	                            'h5',
+	                            null,
+	                            _react2.default.createElement(
+	                                _reactBootstrap.ControlLabel,
+	                                null,
+	                                'Your registration is successful. Please check your e-mail. If you do not have verification email click this button:'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Button,
+	                            { bsStyle: 'primary', ref: 'registrationButton', onClick: this.resend.bind(this), block: true },
+	                            'Resend e-mail'
+	                        )
+	                    )
 	                )
 	            );
 	        }

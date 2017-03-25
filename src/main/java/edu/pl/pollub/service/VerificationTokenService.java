@@ -1,5 +1,6 @@
 package edu.pl.pollub.service;
 
+import edu.pl.pollub.entity.User;
 import edu.pl.pollub.entity.VerificationToken;
 import edu.pl.pollub.exception.ObjectNotFoundException;
 import edu.pl.pollub.exception.TableIsEmptyException;
@@ -21,6 +22,8 @@ public interface VerificationTokenService {
     VerificationToken getById(Long id) throws ObjectNotFoundException;
 
     VerificationToken generateNewVerificationToken(String existingToken);
+
+    VerificationToken generateNewVerificationToken(User user);
 
     VerificationToken getByToken(String token) throws ObjectNotFoundException;
 }

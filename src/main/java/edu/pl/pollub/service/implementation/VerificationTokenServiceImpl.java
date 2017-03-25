@@ -1,5 +1,6 @@
 package edu.pl.pollub.service.implementation;
 
+import edu.pl.pollub.entity.User;
 import edu.pl.pollub.entity.VerificationToken;
 import edu.pl.pollub.exception.ObjectNotFoundException;
 import edu.pl.pollub.exception.TableIsEmptyException;
@@ -75,5 +76,10 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Override
     public VerificationToken generateNewVerificationToken(String existingToken) {
         return new VerificationToken(UUID.randomUUID().toString(), (verificationTokenRepository.findByToken(existingToken)).getUser());
+    }
+
+    @Override
+    public VerificationToken generateNewVerificationToken(User user) {
+        return new VerificationToken(UUID.randomUUID().toString(), user);
     }
 }
