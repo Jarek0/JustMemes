@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { browserHistory } from 'react-router';
 import {Form,FormGroup,ControlLabel,FormControl,Button,Checkbox,Overlay} from 'react-bootstrap';
 
 export default class LoginForm extends React.Component {

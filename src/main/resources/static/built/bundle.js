@@ -28458,13 +28458,23 @@
 	                        _reactBootstrap.Nav,
 	                        { pullRight: true },
 	                        _react2.default.createElement(
-	                            _reactBootstrap.NavItem,
-	                            { onClick: this.navigate.bind(this, "/login"), id: 'login' },
+	                            _reactBootstrap.NavDropdown,
+	                            { eventKey: 3, id: 'dropdown', noCaret: true,
+	                                title: _react2.default.createElement(
+	                                    'span',
+	                                    null,
+	                                    'Login',
+	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-user' })
+	                                ) },
 	                            _react2.default.createElement(
-	                                'span',
-	                                null,
-	                                'Login',
-	                                _react2.default.createElement('i', { className: 'glyphicon glyphicon-user' })
+	                                _reactBootstrap.MenuItem,
+	                                { onClick: this.navigate.bind(this, "/login") },
+	                                'Login'
+	                            ),
+	                            _react2.default.createElement(
+	                                _reactBootstrap.MenuItem,
+	                                { onClick: this.navigate.bind(this, "/register") },
+	                                'Register'
 	                            )
 	                        )
 	                    )
@@ -48511,6 +48521,8 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
+	var _reactRouter = __webpack_require__(189);
+	
 	var _reactBootstrap = __webpack_require__(254);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -48543,7 +48555,7 @@
 	                url: '/login',
 	                type: 'POST',
 	                success: function (data) {
-	                    browserHistory.push("");
+	                    _reactRouter.browserHistory.push("");
 	                }.bind(this),
 	                error: function (xhr, ajaxOptions, thrownError) {
 	                    var error = JSON.parse(xhr.responseText);

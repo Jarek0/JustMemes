@@ -25,7 +25,13 @@ export default class Navigator extends React.Component{
                         <NavItem onClick={this.navigate.bind(this,"/random")}>Random</NavItem>
                     </Nav>
                     <Nav pullRight>
-                        <NavItem onClick={this.navigate.bind(this,"/login")} id="login"><span>Login<i className="glyphicon glyphicon-user"></i></span></NavItem>
+                        <NavDropdown eventKey={3} id="dropdown" noCaret
+                                     title={
+                                         <span>My account<i className="glyphicon glyphicon-user"></i></span>
+                                     }>
+                            <MenuItem onClick={this.navigate.bind(this,"/login")}>Login</MenuItem>
+                            <MenuItem onClick={this.navigate.bind(this,"/register")}>Register</MenuItem>
+                        </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
