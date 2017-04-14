@@ -28,6 +28,10 @@ export default class LoginForm extends React.Component {
             dataType: 'json',
             success: (function(data) {
                 this.setState({registrationSuccessful:{id:data.message,exist:true}});
+                this.username.value="";
+                this.password.value="";
+                this.passwordConfirm.value="";
+                this.email.value="";
             }).bind(this),
             error: (function (xhr, ajaxOptions, thrownError) {
                 var errors=JSON.parse(xhr.responseText);
@@ -97,7 +101,7 @@ export default class LoginForm extends React.Component {
 
     resend(){
         $.ajax({
-            url: '/resendToken',
+            url: '/registration/resendToken',
             type: 'POST',
             contentType: "application/json",
             dataType: 'json',

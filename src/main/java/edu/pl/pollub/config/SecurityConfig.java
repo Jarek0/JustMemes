@@ -4,12 +4,15 @@ import edu.pl.pollub.handler.AuthenticationFailureHandler;
 import edu.pl.pollub.handler.AuthenticationSuccessHandler;
 import edu.pl.pollub.handler.HttpLogoutSuccessHandler;
 import edu.pl.pollub.service.implementation.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -19,31 +22,34 @@ import org.springframework.security.web.session.ConcurrentSessionFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.context.request.RequestContextListener;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
 /**
  * Created by Dell on 2017-03-15.
  */
-@EnableWebSecurity
-public class SecurityConfig {
-    final DataSource dataSource;
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private DataSource dataSource;
 
-    @Inject
-    SecurityConfig(final DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new AuthenticationSuccessHandler();
-    }
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        return new AuthenticationFailureHandler();
-    }
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SessionRegistryImpl sessionRegistry;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public HttpSessionCsrfTokenRepository csrfTokenRepository() {
@@ -55,16 +61,14 @@ public class SecurityConfig {
     @Bean
     public JdbcTokenRepositoryImpl jdbcTokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setCreateTableOnStartup(false);
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
 
         return authenticationProvider;
     }
@@ -75,35 +79,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(11);
-    }
-
-    @Bean
     public ConcurrentSessionFilter concurrentSessionFilter() {
-        ConcurrentSessionFilter concurrentSessionFilter = new ConcurrentSessionFilter(sessionRegistry(), "/session-expired.htm");
+        ConcurrentSessionFilter concurrentSessionFilter = new ConcurrentSessionFilter(sessionRegistry, "/session-expired");
         return concurrentSessionFilter;
     }
 
     @Bean
-    public SessionRegistryImpl sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
-
-    @Bean
-    public UserDetailsServiceImpl userDetailsService() {
-        return new UserDetailsServiceImpl();
-    }
-
-    @Bean
     public PersistentTokenBasedRememberMeServices rememberMeAuthenticationProvider() {
-        return new PersistentTokenBasedRememberMeServices("myAppKey", userDetailsService(), jdbcTokenRepository());
-    }
-
-    @Bean
-    public HttpAuthenticationEntryPoint authenticationEntryPoint() {
-        return new HttpAuthenticationEntryPoint();
+        return new PersistentTokenBasedRememberMeServices("myAppKey", userDetailsService, jdbcTokenRepository());
     }
 
     @Bean
@@ -116,13 +99,11 @@ public class SecurityConfig {
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().ignoringAntMatchers("/login_check**").ignoringAntMatchers("/registration**").csrfTokenRepository(csrfTokenRepository())
+        http.csrf().ignoringAntMatchers("/login/**").ignoringAntMatchers("/registration/**").csrfTokenRepository(csrfTokenRepository())
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint())
-                .and()
-                .httpBasic()
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
 
                 .and()
                 .logout()
@@ -140,21 +121,19 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/root/**").hasRole("ROOT")
-                .antMatchers("/user/**").hasAnyRole("ROOT", "TEACHER", "USER")
-                .antMatchers("/teacher/**").hasAnyRole("ROOT", "TEACHER")
+                .antMatchers("/user/**").hasAnyRole("ROOT", "USER")
+                .antMatchers("/teacher/**").hasAnyRole("ROOT")
 
                 .and()
                 .formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .loginProcessingUrl("/login_check")
-                .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
+                .loginProcessingUrl("/login")
+                .successHandler(authenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
 
                 .and()
                 .sessionManagement()
                 .maximumSessions(1)
                 .expiredUrl("/baned")
-                .sessionRegistry(sessionRegistry());
+                .sessionRegistry(sessionRegistry);
     }
 }

@@ -23,7 +23,7 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
     public LoginAttemptServiceImpl() {
         super();
         attemptsCache = CacheBuilder.newBuilder().
-                expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<String, Integer>() {
+                expireAfterWrite(15, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
             @Override
             public Integer load(String key) {
                 return 0;

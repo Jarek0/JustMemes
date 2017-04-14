@@ -1,24 +1,20 @@
 package edu.pl.pollub.controller.restController;
 
-import com.sun.istack.internal.NotNull;
-import edu.pl.pollub.entity.Mem;
 import edu.pl.pollub.entity.User;
 import edu.pl.pollub.entity.VerificationToken;
 import edu.pl.pollub.entity.request.UserRegisterRequest;
 import edu.pl.pollub.event.OnRegistrationCompleteEvent;
-import edu.pl.pollub.exception.AuthException;
 import edu.pl.pollub.exception.InvalidRequestException;
 import edu.pl.pollub.exception.ObjectNotFoundException;
+import edu.pl.pollub.exception.RegException;
 import edu.pl.pollub.response.GenericResponse;
 import edu.pl.pollub.service.MailService;
 import edu.pl.pollub.service.UserService;
 import edu.pl.pollub.service.VerificationTokenService;
 import edu.pl.pollub.validator.UserValidator;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -34,6 +30,7 @@ import java.util.Locale;
  * Created by Dell on 2017-03-16.
  */
 @RestController
+@RequestMapping(value = "/registration")
 public class SecurityController {
 
     private final ApplicationEventPublisher eventPublisher;
@@ -55,7 +52,7 @@ public class SecurityController {
         this.userValidator = userValidator;
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public GenericResponse registration(@RequestBody @Valid UserRegisterRequest userForm, HttpServletRequest request, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
@@ -84,23 +81,24 @@ public class SecurityController {
         return new GenericResponse(user.getEmail());
     }
 
-    @RequestMapping(value = "/registration/confirm", method = RequestMethod.GET)
+    @RequestMapping(value = "/confirm", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void confirmRegistration(WebRequest request, @RequestParam("token") String token) throws NoSuchObjectException, AuthException, ObjectNotFoundException {
+    public void confirmRegistration(WebRequest request, @RequestParam("token") String token) throws NoSuchObjectException, RegException, ObjectNotFoundException {
         Locale locale = request.getLocale();
 
         VerificationToken verificationToken = verificationTokenService.getByToken(token);
         if (verificationToken == null) {
-            throw new AuthException("Your activation token is invalid, please resend it");
+            throw new RegException("Your activation token is invalid, please resend it");
         }
 
         User user = verificationToken.getUser();
         Calendar cal = Calendar.getInstance();
         if ((verificationToken.getDate() - cal.getTime().getTime()) <= 0) {
-            throw new AuthException("this token is expired");
+            throw new RegException("this token is expired");
         }
 
         user.setEnabled(true);
         userService.saveRegisteredUser(user);
+
     }
 }

@@ -1,6 +1,7 @@
 package edu.pl.pollub.service.implementation;
 
 import edu.pl.pollub.entity.User;
+import edu.pl.pollub.exception.ExtendedAuthException;
 import edu.pl.pollub.repository.UserRepository;
 import edu.pl.pollub.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,33 +44,34 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException, BadCredentialsException, RuntimeException {
+    public UserDetails loadUserByUsername(String username) throws ExtendedAuthException {
 
         String ip = getClientIP();
         if (loginAttemptService.isBlocked(ip)) {
-            throw new RuntimeException("blocked");
+            throw new ExtendedAuthException("You tried to login more than 5 times. So your possibility of login is blocked for 15 minutes");
         }
 
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("user not found");
+            throw new ExtendedAuthException("Bad username or password");
         }
-
-        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
 
         boolean enabled = true;
         if (!user.getEnabled()) {
             enabled = false;
-            throw new DisabledException("not verified");
+            throw new ExtendedAuthException("notVerified:"+user.getEmail());
         }
 
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = !user.getBanned();
         if (!accountNonLocked) {
-            throw new RuntimeException("banned");
+            throw new ExtendedAuthException("Your account is banned by administrator");
         }
+
+        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, grantedAuthorities);
     }
