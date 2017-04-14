@@ -21,7 +21,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.util.Calendar;
 import java.util.Locale;
@@ -83,7 +85,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void confirmRegistration(WebRequest request, @RequestParam("token") String token) throws NoSuchObjectException, RegException, ObjectNotFoundException {
+    public void confirmRegistration(WebRequest request, HttpServletResponse response, @RequestParam("token") String token) throws IOException, RegException, ObjectNotFoundException {
         Locale locale = request.getLocale();
 
         VerificationToken verificationToken = verificationTokenService.getByToken(token);
@@ -100,5 +102,6 @@ public class SecurityController {
         user.setEnabled(true);
         userService.saveRegisteredUser(user);
 
+        response.sendRedirect("/registrationComplete");
     }
 }

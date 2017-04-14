@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class MainController {
 
-    @RequestMapping(method = RequestMethod.GET,value = {"/waiting","/","/waiting/{pageNumber}","/showMem/{id}","/{pageNumber}","/login","/register"})
+    @RequestMapping(method = RequestMethod.GET,value = {"/waiting","/","/waiting/{pageNumber}",
+            "/showMem/{id}","/{pageNumber}","/login","/register","/registrationComplete"})
     public ModelAndView reloadPage(HttpServletRequest request) {
         request.getSession().setAttribute("path",request.getServletPath());
         ModelAndView mav = new ModelAndView();

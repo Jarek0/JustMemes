@@ -89,6 +89,7 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting/(:page)', name: 'waiting_room', component: _WaitingRoom2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'showMem/(:id)', name: 'show_mem', component: _ShowMemPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', name: 'login', component: _Auth2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'registrationComplete', name: 'registrationComplete', component: _Auth2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', name: 'register', component: _Auth2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '(:page)', name: 'main_page', component: _MainPage2.default })
 	    )
@@ -48415,7 +48416,13 @@
 	
 	        var _this = _possibleConstructorReturn(this, (AuthPanel.__proto__ || Object.getPrototypeOf(AuthPanel)).call(this, props));
 	
-	        _this.state = { activeKey: _this.props.location.pathname };
+	        var activeKey = _this.props.location.pathname;
+	        var registrationComplete = false;
+	        if (activeKey == "/registrationComplete") {
+	            activeKey = "/login";
+	            registrationComplete = true;
+	        }
+	        _this.state = { activeKey: activeKey, registrationComplete: registrationComplete };
 	        return _this;
 	    }
 	
@@ -48434,7 +48441,7 @@
 	        value: function render() {
 	            var panel = null;
 	
-	            if (this.state.activeKey == "/login") panel = _react2.default.createElement(_Login2.default, null);else if (this.state.activeKey == "/register") panel = _react2.default.createElement(_Register2.default, null);
+	            if (this.state.activeKey == "/login") panel = _react2.default.createElement(_Login2.default, { registrationComplete: this.state.registrationComplete });else if (this.state.activeKey == "/register") panel = _react2.default.createElement(_Register2.default, null);
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'authPanel' },
@@ -48661,6 +48668,35 @@
 	                            )
 	                        ),
 	                        resendButton
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Overlay,
+	                    {
+	                        show: this.props.registrationComplete && this.state.errorMessage == "",
+	                        placement: 'top',
+	                        container: this,
+	                        target: function target() {
+	                            return _reactDom2.default.findDOMNode(_this2.refs.loginButton);
+	                        }
+	                    },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { style: {
+	                                border: '1px solid #747474',
+	                                borderRadius: 3,
+	                                margin: 3,
+	                                padding: 5
+	                            } },
+	                        _react2.default.createElement(
+	                            'h5',
+	                            null,
+	                            _react2.default.createElement(
+	                                _reactBootstrap.ControlLabel,
+	                                null,
+	                                'Congratulation! You successfully register! Now you can login to your account!'
+	                            )
+	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(

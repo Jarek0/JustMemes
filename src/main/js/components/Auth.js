@@ -7,7 +7,14 @@ import {Row,Col} from 'react-bootstrap';
 export default class AuthPanel extends React.Component {
     constructor(props){
         super(props);
-        this.state = {activeKey: this.props.location.pathname};
+        var activeKey=this.props.location.pathname;
+        var registrationComplete=false;
+        if(activeKey=="/registrationComplete")
+        {
+            activeKey="/login";
+            registrationComplete=true;
+        }
+        this.state = {activeKey: activeKey,registrationComplete: registrationComplete};
     }
 
     getInitialState() {
@@ -24,7 +31,7 @@ export default class AuthPanel extends React.Component {
         let panel = null;
 
         if (this.state.activeKey=="/login")
-            panel = <Login/>;
+            panel = <Login registrationComplete={this.state.registrationComplete}/>;
         else if(this.state.activeKey=="/register")
             panel = <Register/>;
         return(

@@ -89,8 +89,27 @@ export default class LoginForm extends React.Component {
                         margin: 3,
                         padding: 5
                     }}>
-                        <h5><ControlLabel>{this.state.errorMessage}</ControlLabel></h5>
+                        <h5><ControlLabel>
+                            {this.state.errorMessage}
+                            </ControlLabel></h5>
                         {resendButton}
+                    </div>
+                </Overlay>
+                <Overlay
+                    show={this.props.registrationComplete && this.state.errorMessage==""}
+                    placement="top"
+                    container={this}
+                    target={() => ReactDOM.findDOMNode(this.refs.loginButton)}
+                >
+                    <div style={{
+                        border: '1px solid #747474',
+                        borderRadius: 3,
+                        margin: 3,
+                        padding: 5
+                    }}>
+                        <h5><ControlLabel>
+                            Congratulation! You successfully register! Now you can login to your account!
+                        </ControlLabel></h5>
                     </div>
                 </Overlay>
                 <Button bsStyle="primary" ref={(ref) => { this.loginButton = ref; }} bsSize="large" onClick={this.login.bind(this)} block>
