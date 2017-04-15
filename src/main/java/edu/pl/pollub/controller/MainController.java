@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class MainController {
 
     @RequestMapping(method = RequestMethod.GET,value = {"/waiting","/","/waiting/{pageNumber}",
-            "/showMem/{id}","/{pageNumber}","/login","/register","/registrationComplete"})
+            "/showMem/{id}","/{pageNumber}","/login","/register","/registration/complete"})
     public ModelAndView reloadPage(HttpServletRequest request) {
         request.getSession().setAttribute("path",request.getServletPath());
         ModelAndView mav = new ModelAndView();
@@ -33,5 +33,4 @@ public class MainController {
         }
         return "1";
     }
-
 }

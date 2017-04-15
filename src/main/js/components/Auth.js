@@ -9,7 +9,7 @@ export default class AuthPanel extends React.Component {
         super(props);
         var activeKey=this.props.location.pathname;
         var registrationComplete=false;
-        if(activeKey=="/registrationComplete")
+        if(activeKey=="/registration/complete")
         {
             activeKey="/login";
             registrationComplete=true;

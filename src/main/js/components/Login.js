@@ -31,7 +31,7 @@ export default class LoginForm extends React.Component {
                 else
                 this.setState({errorMessage: message});
             }).bind(this),
-            data:'username=' + username + '&password=' + password +'&remember-me='+rememberMe
+            data:'username=' + username + '&password=' + password +'&remember-me-param='+rememberMe
         });
     }
 

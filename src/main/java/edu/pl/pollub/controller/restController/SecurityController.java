@@ -9,12 +9,16 @@ import edu.pl.pollub.exception.ObjectNotFoundException;
 import edu.pl.pollub.exception.RegException;
 import edu.pl.pollub.response.GenericResponse;
 import edu.pl.pollub.service.MailService;
+import edu.pl.pollub.service.RoleService;
 import edu.pl.pollub.service.UserService;
 import edu.pl.pollub.service.VerificationTokenService;
 import edu.pl.pollub.validator.UserValidator;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -32,7 +36,7 @@ import java.util.Locale;
  * Created by Dell on 2017-03-16.
  */
 @RestController
-@RequestMapping(value = "/registration")
+@RequestMapping
 public class SecurityController {
 
     private final ApplicationEventPublisher eventPublisher;
@@ -54,7 +58,7 @@ public class SecurityController {
         this.userValidator = userValidator;
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/registration",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public GenericResponse registration(@RequestBody @Valid UserRegisterRequest userForm, HttpServletRequest request, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
@@ -66,7 +70,7 @@ public class SecurityController {
         return new GenericResponse(user.getEmail());
     }
 
-    @RequestMapping(value = "/resendToken", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/registration/resendToken", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public GenericResponse resendToken(@RequestBody @Valid GenericResponse response, HttpServletRequest request) throws ObjectNotFoundException {
         User user=userService.getByEmail(response.getMessage());
@@ -83,7 +87,7 @@ public class SecurityController {
         return new GenericResponse(user.getEmail());
     }
 
-    @RequestMapping(value = "/confirm", method = RequestMethod.GET)
+    @RequestMapping(value = "/registration/confirm", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public void confirmRegistration(WebRequest request, HttpServletResponse response, @RequestParam("token") String token) throws IOException, RegException, ObjectNotFoundException {
         Locale locale = request.getLocale();
@@ -102,6 +106,15 @@ public class SecurityController {
         user.setEnabled(true);
         userService.saveRegisteredUser(user);
 
-        response.sendRedirect("/registrationComplete");
+        response.sendRedirect("/registration/complete");
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/getAuth")
+    public String getAuth(){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (!(authentication instanceof AnonymousAuthenticationToken)) {
+                String currentUserRole = userService.getByUsername(authentication.getName()).getRole().getName();
+                return currentUserRole;
+            } else return "ANONYMOUS";
     }
 }

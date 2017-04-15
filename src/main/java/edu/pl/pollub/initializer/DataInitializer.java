@@ -1,6 +1,7 @@
 package edu.pl.pollub.initializer;
 
 import edu.pl.pollub.entity.Role;
+import edu.pl.pollub.entity.User;
 import edu.pl.pollub.repository.MemRepository;
 import edu.pl.pollub.repository.RoleRepository;
 import edu.pl.pollub.repository.UserRepository;
@@ -45,12 +46,12 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
 
         }
         if (roleRepository.findByName("USER") == null) {
-            Role user = new Role("USER");
-            roleRepository.save(user);
+            Role role = new Role("USER");
+            roleRepository.save(role);
         }
-        if (roleRepository.findByName("TEACHER") == null) {
-            Role teacher = new Role("TEACHER");
-            roleRepository.save(teacher);
+        if (userRepository.findByUsername("testUser") == null){
+            User user = new User("testUser", bCryptPasswordEncoder.encode("poziomd123"), "jery2@o2.pl", true, false, false, null, roleRepository.findByName("ROOT"));
+            userRepository.save(user);
         }
     }
 

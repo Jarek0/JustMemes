@@ -17,7 +17,7 @@ ReactDOM.render(
             <Route path="waiting/(:page)" name="waiting_room" component={WaitingRoom}></Route>
             <Route path="showMem/(:id)" name="show_mem" component={ShowMemPage}></Route>
             <Route path="login" name="login" component={Auth}></Route>
-            <Route path="registrationComplete" name="registrationComplete" component={Auth}></Route>
+            <Route path="/registration/complete" name="registrationComplete" component={Auth}></Route>
             <Route path="register" name="register" component={Auth}></Route>
             <Route path="(:page)" name="main_page" component={MainPage}></Route>
 

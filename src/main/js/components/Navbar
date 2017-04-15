@@ -4,12 +4,49 @@ import { browserHistory } from 'react-router';
 
 
 export default class Navigator extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {auth:""};
+    }
+
+    componentDidMount(){
+        this.getAuth();
+    }
 
     navigate(e){
         browserHistory.push(e);
     }
 
+    getAuth() {
+        $.ajax({
+            url: '/getAuth',
+            type: 'GET',
+            success: (function (data) {
+                console.log(data);
+                this.setState({auth:data});
+            }).bind(this),
+            error: (function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr);
+            }).bind(this)
+        });
+    }
+
     render(){
+        let authDropdown = [<MenuItem onClick={this.navigate.bind(this,"/login")}>Login</MenuItem>,
+                        <MenuItem onClick={this.navigate.bind(this,"/register")}>Register</MenuItem>];
+
+        if(this.state.auth==='USER')
+            authDropdown = [<MenuItem onClick={this.navigate.bind(this,"/mem/add")}>Add Mem!</MenuItem>,
+                <MenuItem onClick={this.navigate.bind(this,"/changePassword")}>Change password</MenuItem>,
+                <MenuItem onClick={this.navigate.bind(this,"/logout")}>Logout</MenuItem>];
+        else if(this.state.auth==='ROOT')
+            authDropdown = [<MenuItem onClick={this.navigate.bind(this,"/mem/add")}>Add Mem!</MenuItem>,
+                <MenuItem onClick={this.navigate.bind(this,"/changePassword")}>Change password</MenuItem>,
+                <MenuItem onClick={this.navigate.bind(this,"/logout")}>Accept mems</MenuItem>,
+                <MenuItem onClick={this.navigate.bind(this,"/admin/panel")}>Admin panel</MenuItem>,
+                <MenuItem onClick={this.navigate.bind(this,"/logout")}>Logout</MenuItem>];
+
+
         return (
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
@@ -29,9 +66,8 @@ export default class Navigator extends React.Component{
                                      title={
                                          <span>My account<i className="glyphicon glyphicon-user"></i></span>
                                      }>
-                            <MenuItem onClick={this.navigate.bind(this,"/login")}>Login</MenuItem>
-                            <MenuItem onClick={this.navigate.bind(this,"/register")}>Register</MenuItem>
-                        </NavDropdown>
+                            {authDropdown}
+                        </NavDropdown>;
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

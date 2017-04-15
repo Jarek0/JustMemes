@@ -89,7 +89,7 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting/(:page)', name: 'waiting_room', component: _WaitingRoom2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'showMem/(:id)', name: 'show_mem', component: _ShowMemPage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'login', name: 'login', component: _Auth2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'registrationComplete', name: 'registrationComplete', component: _Auth2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/registration/complete', name: 'registrationComplete', component: _Auth2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: 'register', name: 'register', component: _Auth2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '(:page)', name: 'main_page', component: _MainPage2.default })
 	    )
@@ -28401,20 +28401,87 @@
 	var Navigator = function (_React$Component) {
 	    _inherits(Navigator, _React$Component);
 	
-	    function Navigator() {
+	    function Navigator(props) {
 	        _classCallCheck(this, Navigator);
 	
-	        return _possibleConstructorReturn(this, (Navigator.__proto__ || Object.getPrototypeOf(Navigator)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (Navigator.__proto__ || Object.getPrototypeOf(Navigator)).call(this, props));
+	
+	        _this.state = { auth: "" };
+	        return _this;
 	    }
 	
 	    _createClass(Navigator, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.getAuth();
+	        }
+	    }, {
 	        key: 'navigate',
 	        value: function navigate(e) {
 	            _reactRouter.browserHistory.push(e);
 	        }
 	    }, {
+	        key: 'getAuth',
+	        value: function getAuth() {
+	            $.ajax({
+	                url: '/getAuth',
+	                type: 'GET',
+	                success: function (data) {
+	                    console.log(data);
+	                    this.setState({ auth: data });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    console.log(xhr);
+	                }.bind(this)
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var authDropdown = [_react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/login") },
+	                'Login'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/register") },
+	                'Register'
+	            )];
+	
+	            if (this.state.auth === 'USER') authDropdown = [_react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/mem/add") },
+	                'Add Mem!'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/changePassword") },
+	                'Change password'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/logout") },
+	                'Logout'
+	            )];else if (this.state.auth === 'ROOT') authDropdown = [_react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/mem/add") },
+	                'Add Mem!'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/changePassword") },
+	                'Change password'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/logout") },
+	                'Accept mems'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/admin/panel") },
+	                'Admin panel'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/logout") },
+	                'Logout'
+	            )];
+	
 	            return _react2.default.createElement(
 	                _reactBootstrap.Navbar,
 	                { inverse: true, collapseOnSelect: true },
@@ -28463,20 +28530,12 @@
 	                                title: _react2.default.createElement(
 	                                    'span',
 	                                    null,
-	                                    'Login',
+	                                    'My account',
 	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-user' })
 	                                ) },
-	                            _react2.default.createElement(
-	                                _reactBootstrap.MenuItem,
-	                                { onClick: this.navigate.bind(this, "/login") },
-	                                'Login'
-	                            ),
-	                            _react2.default.createElement(
-	                                _reactBootstrap.MenuItem,
-	                                { onClick: this.navigate.bind(this, "/register") },
-	                                'Register'
-	                            )
-	                        )
+	                            authDropdown
+	                        ),
+	                        ';'
 	                    )
 	                )
 	            );
@@ -48428,7 +48487,7 @@
 	
 	        var activeKey = _this.props.location.pathname;
 	        var registrationComplete = false;
-	        if (activeKey == "/registrationComplete") {
+	        if (activeKey == "/registration/complete") {
 	            activeKey = "/login";
 	            registrationComplete = true;
 	        }
@@ -48566,7 +48625,7 @@
 	                        this.setState({ id: message.substr(message.indexOf(":") + 1) });
 	                    } else this.setState({ errorMessage: message });
 	                }.bind(this),
-	                data: 'username=' + username + '&password=' + password + '&remember-me=' + rememberMe
+	                data: 'username=' + username + '&password=' + password + '&remember-me-param=' + rememberMe
 	            });
 	        }
 	    }, {
