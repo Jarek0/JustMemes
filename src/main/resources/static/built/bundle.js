@@ -76,6 +76,10 @@
 	
 	var _Auth2 = _interopRequireDefault(_Auth);
 	
+	var _AddMem = __webpack_require__(516);
+	
+	var _AddMem2 = _interopRequireDefault(_AddMem);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_reactDom2.default.render(_react2.default.createElement(
@@ -85,13 +89,14 @@
 	        _reactRouter.Route,
 	        { path: '/', component: _Layout2.default },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _MainPage2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting', name: 'waiting_room', component: _WaitingRoom2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'waiting/(:page)', name: 'waiting_room', component: _WaitingRoom2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'showMem/(:id)', name: 'show_mem', component: _ShowMemPage2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'login', name: 'login', component: _Auth2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/registration/complete', name: 'registrationComplete', component: _Auth2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'register', name: 'register', component: _Auth2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '(:page)', name: 'main_page', component: _MainPage2.default })
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: 'waiting', name: 'waiting_room', component: _WaitingRoom2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: 'waiting/(:page)', name: 'waiting_room', component: _WaitingRoom2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: 'showMem/(:id)', name: 'show_mem', component: _ShowMemPage2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: 'login', name: 'login', component: _Auth2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/registration/complete', name: 'registrationComplete', component: _Auth2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: 'register', name: 'register', component: _Auth2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: '(:page)', name: 'main_page', component: _MainPage2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { exact: true, path: '/mem/add', name: 'add_mem', component: _AddMem2.default })
 	    )
 	), document.getElementById('layout'));
 
@@ -28416,6 +28421,11 @@
 	            this.getAuth();
 	        }
 	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.getAuth();
+	        }
+	    }, {
 	        key: 'navigate',
 	        value: function navigate(e) {
 	            _reactRouter.browserHistory.push(e);
@@ -28429,6 +28439,20 @@
 	                success: function (data) {
 	                    console.log(data);
 	                    this.setState({ auth: data });
+	                }.bind(this),
+	                error: function (xhr, ajaxOptions, thrownError) {
+	                    console.log(xhr);
+	                }.bind(this)
+	            });
+	        }
+	    }, {
+	        key: 'logout',
+	        value: function logout() {
+	            $.ajax({
+	                url: '/logout',
+	                type: 'GET',
+	                success: function (data) {
+	                    this.getAuth();
 	                }.bind(this),
 	                error: function (xhr, ajaxOptions, thrownError) {
 	                    console.log(xhr);
@@ -28454,11 +28478,15 @@
 	                'Add Mem!'
 	            ), _react2.default.createElement(
 	                _reactBootstrap.MenuItem,
+	                { onClick: this.navigate.bind(this, "/mem/add") },
+	                'My memes'
+	            ), _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
 	                { onClick: this.navigate.bind(this, "/changePassword") },
 	                'Change password'
 	            ), _react2.default.createElement(
 	                _reactBootstrap.MenuItem,
-	                { onClick: this.navigate.bind(this, "/logout") },
+	                { onClick: this.logout.bind(this) },
 	                'Logout'
 	            )];else if (this.state.auth === 'ROOT') authDropdown = [_react2.default.createElement(
 	                _reactBootstrap.MenuItem,
@@ -28474,11 +28502,11 @@
 	                'Accept mems'
 	            ), _react2.default.createElement(
 	                _reactBootstrap.MenuItem,
-	                { onClick: this.navigate.bind(this, "/admin/panel") },
+	                { onClick: this.navigate.bind(this, "/panel") },
 	                'Admin panel'
 	            ), _react2.default.createElement(
 	                _reactBootstrap.MenuItem,
-	                { onClick: this.navigate.bind(this, "/logout") },
+	                { onClick: this.logout.bind(this) },
 	                'Logout'
 	            )];
 	
@@ -49114,6 +49142,119 @@
 	}(_react2.default.Component);
 	
 	exports.default = LoginForm;
+
+/***/ }),
+/* 516 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(254);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var MainPage = function (_React$Component) {
+	    _inherits(MainPage, _React$Component);
+	
+	    function MainPage(props) {
+	        _classCallCheck(this, MainPage);
+	
+	        return _possibleConstructorReturn(this, (MainPage.__proto__ || Object.getPrototypeOf(MainPage)).call(this, props));
+	    }
+	
+	    _createClass(MainPage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {}
+	    }, {
+	        key: 'addMem',
+	        value: function addMem() {}
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return _react2.default.createElement(
+	                _reactBootstrap.Row,
+	                { className: 'mem' },
+	                _react2.default.createElement(_reactBootstrap.Col, { sm: 1, md: 2 }),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Col,
+	                    { sm: 10, md: 8 },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        null,
+	                        'Add mem:'
+	                    ),
+	                    _react2.default.createElement('hr', null),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Form,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactBootstrap.FormGroup,
+	                            { bsSize: 'small' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                _react2.default.createElement(
+	                                    _reactBootstrap.ControlLabel,
+	                                    null,
+	                                    'Mem title:'
+	                                )
+	                            ),
+	                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', id: 'title', inputRef: function inputRef(ref) {
+	                                    _this2.title = ref;
+	                                }, placeholder: 'Title' })
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.FormGroup,
+	                            { bsSize: 'small' },
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                _react2.default.createElement(
+	                                    _reactBootstrap.ControlLabel,
+	                                    null,
+	                                    'Image file:'
+	                                )
+	                            ),
+	                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'file', id: 'file', inputRef: function inputRef(ref) {
+	                                    _this2.file = ref;
+	                                } })
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Button,
+	                            { bsStyle: 'warning', ref: function ref(_ref) {
+	                                    _this2.addMemButton = _ref;
+	                                }, bsSize: 'small', onClick: this.addMem.bind(this), block: true },
+	                            'Add mem'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(_reactBootstrap.Col, { sm: 1, md: 2 })
+	            );
+	        }
+	    }]);
+	
+	    return MainPage;
+	}(_react2.default.Component);
+	
+	exports.default = MainPage;
 
 /***/ })
 /******/ ]);

@@ -13,6 +13,10 @@ export default class Navigator extends React.Component{
         this.getAuth();
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.getAuth();
+    }
+
     navigate(e){
         browserHistory.push(e);
     }
@@ -31,20 +35,34 @@ export default class Navigator extends React.Component{
         });
     }
 
+    logout(){
+        $.ajax({
+            url: '/logout',
+            type: 'GET',
+            success: (function (data) {
+                this.getAuth();
+            }).bind(this),
+            error: (function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr);
+            }).bind(this)
+        });
+    }
+
     render(){
         let authDropdown = [<MenuItem onClick={this.navigate.bind(this,"/login")}>Login</MenuItem>,
                         <MenuItem onClick={this.navigate.bind(this,"/register")}>Register</MenuItem>];
 
         if(this.state.auth==='USER')
             authDropdown = [<MenuItem onClick={this.navigate.bind(this,"/mem/add")}>Add Mem!</MenuItem>,
+                <MenuItem onClick={this.navigate.bind(this,"/mem/add")}>My memes</MenuItem>,
                 <MenuItem onClick={this.navigate.bind(this,"/changePassword")}>Change password</MenuItem>,
-                <MenuItem onClick={this.navigate.bind(this,"/logout")}>Logout</MenuItem>];
+                <MenuItem onClick={this.logout.bind(this)}>Logout</MenuItem>];
         else if(this.state.auth==='ROOT')
             authDropdown = [<MenuItem onClick={this.navigate.bind(this,"/mem/add")}>Add Mem!</MenuItem>,
                 <MenuItem onClick={this.navigate.bind(this,"/changePassword")}>Change password</MenuItem>,
                 <MenuItem onClick={this.navigate.bind(this,"/logout")}>Accept mems</MenuItem>,
-                <MenuItem onClick={this.navigate.bind(this,"/admin/panel")}>Admin panel</MenuItem>,
-                <MenuItem onClick={this.navigate.bind(this,"/logout")}>Logout</MenuItem>];
+                <MenuItem onClick={this.navigate.bind(this,"/panel")}>Admin panel</MenuItem>,
+                <MenuItem onClick={this.logout.bind(this)}>Logout</MenuItem>];
 
 
         return (
